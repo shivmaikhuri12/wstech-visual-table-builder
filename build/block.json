@@ -1,0 +1,107 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "vtb/table-builder",
+  "version": "2.0.0",
+  "title": "Visual Table Builder",
+  "category": "common",
+  "icon": "editor-table",
+  "description": "Create beautiful, professional tables with MS Word/Excel-style features — themes, sorting, filtering, pagination, CSV export, and full cell formatting.",
+  "keywords": [
+    "table",
+    "excel",
+    "word",
+    "grid",
+    "data",
+    "vtb",
+    "wstech"
+  ],
+  "textdomain": "wstech-table-builder",
+  "editorScript": "file:./index.js",
+  "editorStyle": "file:./index.css",
+  "style": "file:./style-index.css",
+  "viewScript": "file:./view.js",
+  "supports": {
+    "html": false,
+    "align": [
+      "wide",
+      "full"
+    ],
+    "color": false,
+    "spacing": false
+  },
+  "attributes": {
+    "tableData": {
+      "type": "array",
+      "default": []
+    },
+    "caption": {
+      "type": "string",
+      "default": ""
+    },
+    "hasHeaderRow": {
+      "type": "boolean",
+      "default": true
+    },
+    "hasFooterRow": {
+      "type": "boolean",
+      "default": false
+    },
+    "theme": {
+      "type": "string",
+      "default": "default"
+    },
+    "borderColor": {
+      "type": "string",
+      "default": "#dee2e6"
+    },
+    "borderWidth": {
+      "type": "number",
+      "default": 1
+    },
+    "borderStyle": {
+      "type": "string",
+      "default": "solid"
+    },
+    "tableWidth": {
+      "type": "string",
+      "default": "100%"
+    },
+    "responsive": {
+      "type": "string",
+      "default": "scroll"
+    },
+    "sortable": {
+      "type": "boolean",
+      "default": false
+    },
+    "searchable": {
+      "type": "boolean",
+      "default": false
+    },
+    "pagination": {
+      "type": "boolean",
+      "default": false
+    },
+    "pageSize": {
+      "type": "number",
+      "default": 10
+    },
+    "frontendCsvExport": {
+      "type": "boolean",
+      "default": false
+    },
+    "firstColumnHeader": {
+      "type": "boolean",
+      "default": false
+    },
+    "hoverHighlight": {
+      "type": "boolean",
+      "default": true
+    },
+    "tableId": {
+      "type": "number",
+      "default": 0
+    }
+  }
+}

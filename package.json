@@ -1,0 +1,23 @@
+{
+	"name": "wstech-table-builder",
+	"version": "2.0.0",
+	"description": "WSTech Visual Table Builder — Professional table builder for WordPress",
+	"author": "Web Solution Technologies (WSTech)",
+	"license": "GPL-2.0-or-later",
+	"homepage": "https://www.wstech.in",
+	"scripts": {
+		"build": "wp-scripts build",
+		"start": "wp-scripts start",
+		"lint:js": "wp-scripts lint-js",
+		"lint:css": "wp-scripts lint-style",
+		"format": "wp-scripts format"
+	},
+	"devDependencies": {
+		"@wordpress/block-editor": "^15.21.0",
+		"@wordpress/blocks": "^15.21.0",
+		"@wordpress/components": "^35.0.0",
+		"@wordpress/element": "^8.0.0",
+		"@wordpress/i18n": "^6.21.0",
+		"@wordpress/scripts": "^30.0.0"
+	}
+}

@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256" role="img" aria-labelledby="title desc">
+	<title id="title">WSTech Visual Table Builder icon</title>
+	<desc id="desc">Stylized spreadsheet table icon.</desc>
+	<defs>
+		<linearGradient id="icon-bg" x1="0" y1="0" x2="1" y2="1">
+			<stop offset="0" stop-color="#2563eb"/>
+			<stop offset="1" stop-color="#0f766e"/>
+		</linearGradient>
+	</defs>
+	<rect width="256" height="256" rx="48" fill="url(#icon-bg)"/>
+	<rect x="42" y="54" width="172" height="148" rx="18" fill="#ffffff"/>
+	<rect x="42" y="54" width="172" height="42" rx="18" fill="#f97316"/>
+	<rect x="42" y="82" width="172" height="14" fill="#f97316"/>
+	<g stroke="#d5dde8" stroke-width="8" stroke-linecap="round">
+		<path d="M42 132 H214"/>
+		<path d="M42 168 H214"/>
+		<path d="M99 96 V202"/>
+		<path d="M157 96 V202"/>
+	</g>
+	<g fill="#ffffff">
+		<rect x="62" y="70" width="24" height="10" rx="5"/>
+		<rect x="116" y="70" width="24" height="10" rx="5"/>
+		<rect x="170" y="70" width="24" height="10" rx="5"/>
+	</g>
+	<rect x="108" y="140" width="40" height="20" rx="8" fill="#14b8a6"/>
+</svg>
