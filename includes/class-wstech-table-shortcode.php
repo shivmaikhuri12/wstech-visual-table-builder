@@ -114,7 +114,7 @@ class WSTech_Table_Shortcode {
 		// Ensure frontend assets are enqueued.
 		self::ensure_assets();
 
-		return WSTech_Table_Renderer::render( $table_data, $settings, $styles );
+		return WSTech_Table_Renderer::render_safe( $table_data, $settings, $styles );
 	}
 
 	/**

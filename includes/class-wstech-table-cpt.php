@@ -26,7 +26,7 @@ class WSTech_Table_CPT {
 		add_action( 'manage_wstech_table_posts_custom_column', array( __CLASS__, 'render_column' ), 10, 2 );
 		add_filter( 'post_row_actions', array( __CLASS__, 'row_actions' ), 10, 2 );
 		add_action( 'add_meta_boxes', array( __CLASS__, 'add_meta_boxes' ) );
-		add_action( 'admin_footer', array( __CLASS__, 'copy_shortcode_script' ) );
+		add_action( 'admin_enqueue_scripts', array( __CLASS__, 'enqueue_shortcode_admin_assets' ) );
 	}
 
 	/**
@@ -124,7 +124,7 @@ class WSTech_Table_CPT {
 			case 'shortcode':
 				$shortcode = '[wstech_table id="' . $post_id . '"]';
 				printf(
-					'<code class="wstb-shortcode-code" style="cursor:pointer;user-select:all;" title="%s" data-shortcode="%s">%s</code> <span class="dashicons dashicons-clipboard wstb-copy-icon" style="cursor:pointer;vertical-align:middle;color:#2271b1;" data-shortcode="%s" title="%s"></span>',
+					'<code class="wstb-shortcode-code" title="%s" data-shortcode="%s">%s</code> <span class="dashicons dashicons-clipboard wstb-copy-icon" data-shortcode="%s" title="%s"></span>',
 					esc_attr__( 'Click to copy', 'wstech-table-builder' ),
 					esc_attr( $shortcode ),
 					esc_html( $shortcode ),
@@ -203,15 +203,13 @@ class WSTech_Table_CPT {
 					<strong><?php esc_html_e( 'Shortcode:', 'wstech-table-builder' ); ?></strong>
 				</label>
 			</p>
-			<div style="display:flex;gap:4px;">
+			<div class="wstb-embed-copy-row">
 				<input
 					type="text"
 					id="wstb-shortcode-field"
 					value="<?php echo esc_attr( $shortcode ); ?>"
 					readonly
-					class="widefat"
-					style="font-family:monospace;font-size:12px;"
-					onclick="this.select();"
+					class="widefat wstb-shortcode-field"
 				/>
 				<button
 					type="button"
@@ -219,18 +217,18 @@ class WSTech_Table_CPT {
 					data-shortcode="<?php echo esc_attr( $shortcode ); ?>"
 					title="<?php esc_attr_e( 'Copy to clipboard', 'wstech-table-builder' ); ?>"
 				>
-					<span class="dashicons dashicons-clipboard" style="vertical-align:middle;"></span>
+					<span class="dashicons dashicons-clipboard"></span>
 				</button>
 			</div>
 
-			<div class="wstb-embed-instructions" style="margin-top:12px;">
+			<div class="wstb-embed-instructions">
 				<p class="description">
 					<?php esc_html_e( 'Paste this shortcode into any post, page, or widget area to embed this table.', 'wstech-table-builder' ); ?>
 				</p>
-				<p class="description" style="margin-top:8px;">
+				<p class="description wstb-slug-description">
 					<?php esc_html_e( 'You can also use the slug:', 'wstech-table-builder' ); ?>
 					<br />
-					<code style="font-size:11px;">[wstech_table slug="<?php echo esc_html( $post->post_name ); ?>"]</code>
+					<code class="wstb-shortcode-example">[wstech_table slug="<?php echo esc_html( $post->post_name ); ?>"]</code>
 				</p>
 			</div>
 		</div>
@@ -238,21 +236,56 @@ class WSTech_Table_CPT {
 	}
 
 	/**
-	 * Output inline JavaScript for clipboard copy with a toast notification.
+	 * Enqueue admin CSS and JavaScript for clipboard copy with a toast notification.
 	 *
 	 * Only loads on wstech_table admin screens.
 	 *
+	 * @param string $hook_suffix Current admin screen hook suffix.
 	 * @return void
 	 */
-	public static function copy_shortcode_script() {
+	public static function enqueue_shortcode_admin_assets( $hook_suffix = '' ) {
+		unset( $hook_suffix );
+
 		$screen = get_current_screen();
 
 		if ( ! $screen || 'wstech_table' !== $screen->post_type ) {
 			return;
 		}
 
-		?>
-		<style>
+		wp_register_style( 'wstb-admin-shortcode', false, array(), WSTB_VERSION );
+		wp_enqueue_style( 'wstb-admin-shortcode' );
+		wp_add_inline_style(
+			'wstb-admin-shortcode',
+			'
+			.wstb-shortcode-code {
+				cursor: pointer;
+				user-select: all;
+			}
+			.wstb-copy-icon {
+				color: #2271b1;
+				cursor: pointer;
+				vertical-align: middle;
+			}
+			.wstb-embed-copy-row {
+				display: flex;
+				gap: 4px;
+			}
+			.wstb-shortcode-field {
+				font-family: monospace;
+				font-size: 12px;
+			}
+			.wstb-copy-btn .dashicons {
+				vertical-align: middle;
+			}
+			.wstb-embed-instructions {
+				margin-top: 12px;
+			}
+			.wstb-slug-description {
+				margin-top: 8px;
+			}
+			.wstb-shortcode-example {
+				font-size: 11px;
+			}
 			.wstb-toast {
 				position: fixed;
 				bottom: 30px;
@@ -271,96 +304,93 @@ class WSTech_Table_CPT {
 			.wstb-toast.wstb-toast--visible {
 				opacity: 1;
 			}
-		</style>
-		<script>
-		(function() {
-			'use strict';
+			'
+		);
 
-			function wstbShowToast( message ) {
-				var existing = document.querySelector( '.wstb-toast' );
-				if ( existing ) {
-					existing.remove();
-				}
+		wp_register_script( 'wstb-admin-shortcode', false, array(), WSTB_VERSION, true );
+		wp_enqueue_script( 'wstb-admin-shortcode' );
 
-				var toast = document.createElement( 'div' );
-				toast.className = 'wstb-toast';
-				toast.textContent = message;
-				document.body.appendChild( toast );
+		$copied_message = wp_json_encode( __( 'Shortcode copied to clipboard.', 'wstech-table-builder' ) );
+		$failed_message = wp_json_encode( __( 'Failed to copy. Please copy manually.', 'wstech-table-builder' ) );
 
-				// Trigger reflow then show.
-				toast.offsetHeight;
-				toast.classList.add( 'wstb-toast--visible' );
+		wp_add_inline_script(
+			'wstb-admin-shortcode',
+			sprintf(
+				"
+				(function() {
+					'use strict';
 
-				setTimeout( function() {
-					toast.classList.remove( 'wstb-toast--visible' );
-					setTimeout( function() {
-						toast.remove();
-					}, 300 );
-				}, 2000 );
-			}
+					var copiedMessage = %1\$s;
+					var failedMessage = %2\$s;
 
-			function wstbCopyToClipboard( text ) {
-				if ( navigator.clipboard && navigator.clipboard.writeText ) {
-					navigator.clipboard.writeText( text ).then( function() {
-						wstbShowToast( '✓ Shortcode copied to clipboard!' );
-					} ).catch( function() {
-						wstbFallbackCopy( text );
+					function wstbShowToast( message ) {
+						var existing = document.querySelector( '.wstb-toast' );
+						if ( existing ) {
+							existing.remove();
+						}
+
+						var toast = document.createElement( 'div' );
+						toast.className = 'wstb-toast';
+						toast.textContent = message;
+						document.body.appendChild( toast );
+
+						toast.offsetHeight;
+						toast.classList.add( 'wstb-toast--visible' );
+
+						setTimeout( function() {
+							toast.classList.remove( 'wstb-toast--visible' );
+							setTimeout( function() {
+								toast.remove();
+							}, 300 );
+						}, 2000 );
+					}
+
+					function wstbFallbackCopy( text ) {
+						var textarea = document.createElement( 'textarea' );
+						textarea.value = text;
+						textarea.style.position = 'fixed';
+						textarea.style.opacity = '0';
+						document.body.appendChild( textarea );
+						textarea.select();
+						try {
+							document.execCommand( 'copy' );
+							wstbShowToast( copiedMessage );
+						} catch ( err ) {
+							wstbShowToast( failedMessage );
+						}
+						document.body.removeChild( textarea );
+					}
+
+					function wstbCopyToClipboard( text ) {
+						if ( navigator.clipboard && navigator.clipboard.writeText ) {
+							navigator.clipboard.writeText( text ).then( function() {
+								wstbShowToast( copiedMessage );
+							} ).catch( function() {
+								wstbFallbackCopy( text );
+							} );
+						} else {
+							wstbFallbackCopy( text );
+						}
+					}
+
+					document.addEventListener( 'click', function( event ) {
+						var field = event.target.closest( '.wstb-shortcode-field' );
+						var trigger = event.target.closest( '.wstb-copy-icon, .wstb-shortcode-code, .wstb-copy-btn, .wstb-copy-shortcode-link' );
+
+						if ( field ) {
+							field.select();
+						}
+
+						if ( trigger && trigger.dataset.shortcode ) {
+							event.preventDefault();
+							wstbCopyToClipboard( trigger.dataset.shortcode );
+						}
 					} );
-				} else {
-					wstbFallbackCopy( text );
-				}
-			}
-
-			function wstbFallbackCopy( text ) {
-				var textarea = document.createElement( 'textarea' );
-				textarea.value = text;
-				textarea.style.position = 'fixed';
-				textarea.style.opacity = '0';
-				document.body.appendChild( textarea );
-				textarea.select();
-				try {
-					document.execCommand( 'copy' );
-					wstbShowToast( '✓ Shortcode copied to clipboard!' );
-				} catch ( err ) {
-					wstbShowToast( '✗ Failed to copy. Please copy manually.' );
-				}
-				document.body.removeChild( textarea );
-			}
-
-			document.addEventListener( 'click', function( e ) {
-				// Copy icon in list table.
-				var icon = e.target.closest( '.wstb-copy-icon' );
-				if ( icon && icon.dataset.shortcode ) {
-					e.preventDefault();
-					wstbCopyToClipboard( icon.dataset.shortcode );
-					return;
-				}
-
-				// Shortcode code element in list table.
-				var code = e.target.closest( '.wstb-shortcode-code' );
-				if ( code && code.dataset.shortcode ) {
-					wstbCopyToClipboard( code.dataset.shortcode );
-					return;
-				}
-
-				// Copy button in meta box.
-				var btn = e.target.closest( '.wstb-copy-btn' );
-				if ( btn && btn.dataset.shortcode ) {
-					e.preventDefault();
-					wstbCopyToClipboard( btn.dataset.shortcode );
-					return;
-				}
-
-				// Copy shortcode row action.
-				var link = e.target.closest( '.wstb-copy-shortcode-link' );
-				if ( link && link.dataset.shortcode ) {
-					e.preventDefault();
-					wstbCopyToClipboard( link.dataset.shortcode );
-					return;
-				}
-			} );
-		})();
-		</script>
-		<?php
+				}());
+				",
+				$copied_message,
+				$failed_message
+			)
+		);
 	}
 }

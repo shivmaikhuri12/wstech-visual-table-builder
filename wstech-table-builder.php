@@ -123,7 +123,7 @@ function wstb_render_block( $attributes, $content ) {
 		return '';
 	}
 
-	return WSTech_Table_Renderer::render( $table_data, $settings, $styles );
+	return WSTech_Table_Renderer::render_safe( $table_data, $settings, $styles );
 }
 
 /**
@@ -281,7 +281,7 @@ function wstb_plugin_action_links( $links ) {
 			esc_html__( 'Add New Table', 'wstech-table-builder' )
 		),
 		sprintf(
-			'<a href="%s" target="_blank" rel="noopener noreferrer" style="font-weight:600;color:#0a7f42;">%s</a>',
+			'<a href="%s" target="_blank" rel="noopener noreferrer">%s</a>',
 			esc_url( 'https://wstech.in/donate' ),
 			esc_html__( 'Donate', 'wstech-table-builder' )
 		),

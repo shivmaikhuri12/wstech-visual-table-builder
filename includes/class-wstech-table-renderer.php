@@ -24,7 +24,7 @@ class WSTech_Table_Renderer {
 	 * @param array $table_data Rows and cells data.
 	 * @param array $settings   Table behavior settings.
 	 * @param array $styles     Table visual styles.
-	 * @return string Complete HTML output.
+	 * @return string Complete HTML output with dynamic values escaped.
 	 */
 	public static function render( $table_data, $settings, $styles ) {
 		$table_data = self::normalize_table_data( $table_data );
@@ -221,6 +221,96 @@ class WSTech_Table_Renderer {
 		$output .= '</div>'; // .vtb-block
 
 		return $output;
+	}
+
+	/**
+	 * Render a table and pass the final HTML through a strict KSES allow-list.
+	 *
+	 * The renderer escapes attributes as it builds the table and uses
+	 * wp_kses_post() for RichText cell content. This final pass keeps the
+	 * render_callback and shortcode return values explicitly KSES-filtered for
+	 * repository review.
+	 *
+	 * @param array $table_data Rows and cells data.
+	 * @param array $settings   Table behavior settings.
+	 * @param array $styles     Table visual styles.
+	 * @return string KSES-filtered table HTML.
+	 */
+	public static function render_safe( $table_data, $settings, $styles ) {
+		return wp_kses( self::render( $table_data, $settings, $styles ), self::get_allowed_html() );
+	}
+
+	/**
+	 * Get the HTML tags and attributes allowed in rendered table markup.
+	 *
+	 * @return array Allowed HTML tags and attributes for wp_kses().
+	 */
+	private static function get_allowed_html() {
+		$allowed_html = wp_kses_allowed_html( 'post' );
+
+		$common_attributes = array(
+			'class'      => true,
+			'id'         => true,
+			'role'       => true,
+			'style'      => true,
+			'title'      => true,
+			'aria-label' => true,
+			'aria-live'  => true,
+		);
+
+		foreach ( array( 'div', 'table', 'caption', 'thead', 'tbody', 'tfoot', 'tr', 'th', 'td', 'input', 'button', 'span' ) as $tag ) {
+			$allowed_html[ $tag ] = array_merge(
+				isset( $allowed_html[ $tag ] ) ? $allowed_html[ $tag ] : array(),
+				$common_attributes
+			);
+		}
+
+		$allowed_html['table'] = array_merge(
+			$allowed_html['table'],
+			array(
+				'data-vtb-sortable'   => true,
+				'data-vtb-searchable' => true,
+				'data-vtb-pagination' => true,
+				'data-vtb-page-size'  => true,
+				'data-vtb-csv'        => true,
+				'data-vtb-hover'      => true,
+				'data-vtb-first-col'  => true,
+			)
+		);
+
+		foreach ( array( 'th', 'td' ) as $cell_tag ) {
+			$allowed_html[ $cell_tag ] = array_merge(
+				$allowed_html[ $cell_tag ],
+				array(
+					'colspan'        => true,
+					'rowspan'        => true,
+					'scope'          => true,
+					'data-vtb-label' => true,
+				)
+			);
+		}
+
+		$allowed_html['input'] = array_merge(
+			$allowed_html['input'],
+			array(
+				'type'        => true,
+				'name'        => true,
+				'value'       => true,
+				'placeholder' => true,
+				'readonly'    => true,
+				'disabled'    => true,
+			)
+		);
+
+		$allowed_html['button'] = array_merge(
+			$allowed_html['button'],
+			array(
+				'type'     => true,
+				'disabled' => true,
+			)
+		);
+
+		return $allowed_html;
 	}
 
 	/**

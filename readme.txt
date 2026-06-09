@@ -1,5 +1,5 @@
 === WSTech Visual Table Builder ===
-Contributors: wstech
+Contributors: shivmaikhuri
 Donate link: https://wstech.in/donate
 Tags: table, gutenberg, table-builder, responsive-table, shortcode
 Requires at least: 6.2
@@ -77,6 +77,16 @@ A professional WordPress table builder with drag-and-drop editing, merge cells, 
 * The plugin does not send table data to external services.
 * Links to the plugin website and donation page are ordinary admin/readme links only.
 
+**Source Code and Build**
+* Public source repository: https://github.com/shivmaikhuri12/wstech-visual-table-builder
+* Editable block source files are in the `src/` directory.
+* Compiled block assets are generated into the `build/` directory by `@wordpress/scripts`.
+* Build tools and development dependencies are declared in `package.json`.
+* To rebuild the production assets from source, run:
+
+    npm install
+    npm run build
+
 **Uninstall**
 * Uninstalling the plugin through WordPress removes WSTech Tables created by the plugin and their associated post meta.
 
@@ -120,6 +130,9 @@ When you enable **Sortable Columns** in the sidebar, visitors can click any colu
 
 = Can I merge cells? =
 Yes. Shift+click to select a rectangular range, then click **Merge Cells** in the format bar.
+
+= Where is the source code for the compiled block assets? =
+The public source repository is https://github.com/shivmaikhuri12/wstech-visual-table-builder. Editable files are in `src/`, compiled files are in `build/`, and the production build can be regenerated with `npm install` followed by `npm run build`.
 
 == Screenshots ==
 
