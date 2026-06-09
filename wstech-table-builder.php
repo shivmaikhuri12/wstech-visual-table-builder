@@ -1,7 +1,7 @@
 <?php
 /**
  * Plugin Name: WSTech Visual Table Builder
- * Plugin URI: https://www.wstech.in
+ * Plugin URI: https://github.com/shivmaikhuri12/wstech-visual-table-builder
  * Description: Professional visual table builder for WordPress with drag-and-drop editing, merge cells, templates, import/export, shortcodes, and responsive data tables.
  * Version: 2.0.0
  * Requires at least: 6.2
