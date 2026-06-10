@@ -7,10 +7,9 @@
  * Requires at least: 6.2
  * Requires PHP: 7.4
  * Author: Web Solution Technologies
- * Author URI: https://www.wstech.in
  * License: GPL-2.0-or-later
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
- * Text Domain: wstech-table-builder
+ * Text Domain: wstech-visual-table-builder
  *
  * @package WSTech_Table_Builder
  */
@@ -252,7 +251,7 @@ function wstb_admin_notice_missing_build() {
 			<?php
 			printf(
 				/* translators: 1: npm run build command wrapped in code tags */
-				esc_html__( 'WSTech Visual Table Builder: Build directory not found. Please run %s to compile the block assets.', 'wstech-table-builder' ),
+				esc_html__( 'WSTech Visual Table Builder: Build directory not found. Please run %s to compile the block assets.', 'wstech-visual-table-builder' ),
 				'<code>npm run build</code>'
 			);
 			?>
@@ -273,17 +272,17 @@ function wstb_plugin_action_links( $links ) {
 		sprintf(
 			'<a href="%s">%s</a>',
 			esc_url( admin_url( 'edit.php?post_type=wstech_table' ) ),
-			esc_html__( 'Manage Tables', 'wstech-table-builder' )
+			esc_html__( 'Manage Tables', 'wstech-visual-table-builder' )
 		),
 		sprintf(
 			'<a href="%s">%s</a>',
 			esc_url( admin_url( 'post-new.php?post_type=wstech_table' ) ),
-			esc_html__( 'Add New Table', 'wstech-table-builder' )
+			esc_html__( 'Add New Table', 'wstech-visual-table-builder' )
 		),
 		sprintf(
 			'<a href="%s" target="_blank" rel="noopener noreferrer">%s</a>',
 			esc_url( 'https://wstech.in/donate' ),
-			esc_html__( 'Donate', 'wstech-table-builder' )
+			esc_html__( 'Donate', 'wstech-visual-table-builder' )
 		),
 	);
 
@@ -300,7 +299,7 @@ add_filter( 'plugin_action_links_' . plugin_basename( WSTB_PLUGIN_FILE ), 'wstb_
 function wstb_plugin_information_url( $section = '' ) {
 	$args = array(
 		'tab'       => 'plugin-information',
-		'plugin'    => 'wstech-table-builder',
+		'plugin'    => 'wstech-visual-table-builder',
 		'TB_iframe' => 'true',
 		'width'     => 772,
 		'height'    => 680,
@@ -344,22 +343,22 @@ function wstb_plugin_row_meta( $links, $file ) {
 	$links[] = sprintf(
 		'<a href="%s" class="thickbox open-plugin-details-modal" aria-label="%s">%s</a>',
 		esc_url( wstb_plugin_information_url() ),
-		esc_attr__( 'View WSTech Visual Table Builder details', 'wstech-table-builder' ),
-		esc_html__( 'View details', 'wstech-table-builder' )
+		esc_attr__( 'View WSTech Visual Table Builder details', 'wstech-visual-table-builder' ),
+		esc_html__( 'View details', 'wstech-visual-table-builder' )
 	);
 
 	$links[] = sprintf(
 		'<a href="%s" class="thickbox open-plugin-details-modal" aria-label="%s">%s</a>',
 		esc_url( wstb_plugin_information_url( 'docs' ) ),
-		esc_attr__( 'Open WSTech Visual Table Builder documentation', 'wstech-table-builder' ),
-		esc_html__( 'Docs', 'wstech-table-builder' )
+		esc_attr__( 'Open WSTech Visual Table Builder documentation', 'wstech-visual-table-builder' ),
+		esc_html__( 'Docs', 'wstech-visual-table-builder' )
 	);
 
 	$links[] = sprintf(
 		'<a href="%s" class="thickbox open-plugin-details-modal" aria-label="%s">%s</a>',
 		esc_url( wstb_plugin_information_url( 'faq' ) ),
-		esc_attr__( 'Open WSTech Visual Table Builder frequently asked questions', 'wstech-table-builder' ),
-		esc_html__( 'FAQs', 'wstech-table-builder' )
+		esc_attr__( 'Open WSTech Visual Table Builder frequently asked questions', 'wstech-visual-table-builder' ),
+		esc_html__( 'FAQs', 'wstech-visual-table-builder' )
 	);
 
 	return $links;
@@ -375,17 +374,17 @@ add_filter( 'plugin_row_meta', 'wstb_plugin_row_meta', 10, 2 );
  * @return false|object|WP_Error Plugin API result.
  */
 function wstb_plugin_information( $result, $action, $args ) {
-	if ( 'plugin_information' !== $action || empty( $args->slug ) || 'wstech-table-builder' !== $args->slug ) {
+	if ( 'plugin_information' !== $action || empty( $args->slug ) || 'wstech-visual-table-builder' !== $args->slug ) {
 		return $result;
 	}
 
 	return (object) array(
 		'name'              => 'WSTech Visual Table Builder',
-		'slug'              => 'wstech-table-builder',
+		'slug'              => 'wstech-visual-table-builder',
 		'version'           => WSTB_VERSION,
-		'author'            => '<a href="https://www.wstech.in" target="_blank" rel="noopener noreferrer">Web Solution Technologies</a>',
-		'author_profile'    => 'https://www.wstech.in',
-		'homepage'          => 'https://www.wstech.in',
+		'author'            => 'Web Solution Technologies',
+		'author_profile'    => 'https://github.com/shivmaikhuri12',
+		'homepage'          => 'https://github.com/shivmaikhuri12/wstech-visual-table-builder',
 		'requires'          => '6.2',
 		'tested'            => '7.0',
 		'requires_php'      => '7.4',
@@ -475,7 +474,7 @@ function wstb_plugin_information_sections() {
 			array(
 				'<h2>Installation</h2>',
 				'<ol>',
-				'<li>Upload the <code>wstech-table-builder</code> plugin ZIP from <strong>Plugins &rarr; Add New &rarr; Upload Plugin</strong>.</li>',
+				'<li>Upload the <code>wstech-visual-table-builder</code> plugin ZIP from <strong>Plugins &rarr; Add New &rarr; Upload Plugin</strong>.</li>',
 				'<li>Activate <strong>WSTech Visual Table Builder</strong> from the Plugins screen.</li>',
 				'<li>Go to <a href="' . $add_table_url . '" target="_parent">WSTech Tables &rarr; Add New</a> to create your first reusable table.</li>',
 				'<li>Publish the table and copy the shortcode from the sidebar meta box or the tables list screen.</li>',
@@ -598,24 +597,24 @@ function wstb_plugin_information_sections() {
  */
 function wstb_duplicate_table() {
 	if ( ! isset( $_GET['post'] ) || ! isset( $_GET['_wpnonce'] ) ) {
-		wp_die( esc_html__( 'Invalid request.', 'wstech-table-builder' ) );
+		wp_die( esc_html__( 'Invalid request.', 'wstech-visual-table-builder' ) );
 	}
 
 	$post_id = absint( $_GET['post'] );
 	$nonce   = sanitize_text_field( wp_unslash( $_GET['_wpnonce'] ) );
 
 	if ( ! wp_verify_nonce( $nonce, 'wstb_duplicate_' . $post_id ) ) {
-		wp_die( esc_html__( 'Security check failed.', 'wstech-table-builder' ) );
+		wp_die( esc_html__( 'Security check failed.', 'wstech-visual-table-builder' ) );
 	}
 
 	$post = get_post( $post_id );
 
 	if ( ! $post || 'wstech_table' !== $post->post_type ) {
-		wp_die( esc_html__( 'Table not found.', 'wstech-table-builder' ) );
+		wp_die( esc_html__( 'Table not found.', 'wstech-visual-table-builder' ) );
 	}
 
 	if ( ! current_user_can( 'edit_post', $post_id ) ) {
-		wp_die( esc_html__( 'You do not have permission to duplicate this table.', 'wstech-table-builder' ) );
+		wp_die( esc_html__( 'You do not have permission to duplicate this table.', 'wstech-visual-table-builder' ) );
 	}
 
 	// Create the duplicate post.
@@ -623,7 +622,7 @@ function wstb_duplicate_table() {
 		array(
 			'post_title'   => sprintf(
 				/* translators: %s: original table title */
-				__( '%s (Copy)', 'wstech-table-builder' ),
+				__( '%s (Copy)', 'wstech-visual-table-builder' ),
 				$post->post_title
 			),
 			'post_content' => $post->post_content,
@@ -634,7 +633,7 @@ function wstb_duplicate_table() {
 	);
 
 	if ( is_wp_error( $new_post_id ) ) {
-		wp_die( esc_html__( 'Failed to duplicate table.', 'wstech-table-builder' ) );
+		wp_die( esc_html__( 'Failed to duplicate table.', 'wstech-visual-table-builder' ) );
 	}
 
 	// Copy all post meta.

@@ -8,7 +8,7 @@
 	"icon": "editor-table",
 	"description": "Create beautiful, professional tables with MS Word/Excel-style features — themes, sorting, filtering, pagination, CSV export, and full cell formatting.",
 	"keywords": [ "table", "excel", "word", "grid", "data", "vtb", "wstech" ],
-	"textdomain": "wstech-table-builder",
+	"textdomain": "wstech-visual-table-builder",
 	"editorScript": "file:./index.js",
 	"editorStyle": "file:./index.css",
 	"style": "file:./style-index.css",

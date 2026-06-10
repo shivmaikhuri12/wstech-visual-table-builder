@@ -52,20 +52,23 @@ import {
 } from './utils/mergeHelpers';
 
 const COLORS = [
-	{ name: __( 'White', 'wstech-table-builder' ), color: '#ffffff' },
-	{ name: __( 'Light Gray', 'wstech-table-builder' ), color: '#f3f4f6' },
-	{ name: __( 'Gray', 'wstech-table-builder' ), color: '#9ca3af' },
-	{ name: __( 'Dark', 'wstech-table-builder' ), color: '#374151' },
-	{ name: __( 'Black', 'wstech-table-builder' ), color: '#000000' },
-	{ name: __( 'Indigo', 'wstech-table-builder' ), color: '#4f46e5' },
-	{ name: __( 'Blue', 'wstech-table-builder' ), color: '#2563eb' },
-	{ name: __( 'Sky', 'wstech-table-builder' ), color: '#0ea5e9' },
-	{ name: __( 'Green', 'wstech-table-builder' ), color: '#16a34a' },
-	{ name: __( 'Yellow', 'wstech-table-builder' ), color: '#eab308' },
-	{ name: __( 'Orange', 'wstech-table-builder' ), color: '#f97316' },
-	{ name: __( 'Red', 'wstech-table-builder' ), color: '#dc2626' },
-	{ name: __( 'Pink', 'wstech-table-builder' ), color: '#ec4899' },
-	{ name: __( 'Purple', 'wstech-table-builder' ), color: '#9333ea' },
+	{ name: __( 'White', 'wstech-visual-table-builder' ), color: '#ffffff' },
+	{
+		name: __( 'Light Gray', 'wstech-visual-table-builder' ),
+		color: '#f3f4f6',
+	},
+	{ name: __( 'Gray', 'wstech-visual-table-builder' ), color: '#9ca3af' },
+	{ name: __( 'Dark', 'wstech-visual-table-builder' ), color: '#374151' },
+	{ name: __( 'Black', 'wstech-visual-table-builder' ), color: '#000000' },
+	{ name: __( 'Indigo', 'wstech-visual-table-builder' ), color: '#4f46e5' },
+	{ name: __( 'Blue', 'wstech-visual-table-builder' ), color: '#2563eb' },
+	{ name: __( 'Sky', 'wstech-visual-table-builder' ), color: '#0ea5e9' },
+	{ name: __( 'Green', 'wstech-visual-table-builder' ), color: '#16a34a' },
+	{ name: __( 'Yellow', 'wstech-visual-table-builder' ), color: '#eab308' },
+	{ name: __( 'Orange', 'wstech-visual-table-builder' ), color: '#f97316' },
+	{ name: __( 'Red', 'wstech-visual-table-builder' ), color: '#dc2626' },
+	{ name: __( 'Pink', 'wstech-visual-table-builder' ), color: '#ec4899' },
+	{ name: __( 'Purple', 'wstech-visual-table-builder' ), color: '#9333ea' },
 ];
 
 export default function Edit( { attributes, setAttributes } ) {
@@ -197,7 +200,7 @@ export default function Edit( { attributes, setAttributes } ) {
 				{
 					label:
 						'➕ ' +
-						__( 'Insert Row Above', 'wstech-table-builder' ),
+						__( 'Insert Row Above', 'wstech-visual-table-builder' ),
 					action: () =>
 						updateTable(
 							addRowBefore( tableData, contextMenu.row )
@@ -206,7 +209,7 @@ export default function Edit( { attributes, setAttributes } ) {
 				{
 					label:
 						'➕ ' +
-						__( 'Insert Row Below', 'wstech-table-builder' ),
+						__( 'Insert Row Below', 'wstech-visual-table-builder' ),
 					action: () =>
 						updateTable(
 							addRowAfter( tableData, contextMenu.row )
@@ -214,14 +217,17 @@ export default function Edit( { attributes, setAttributes } ) {
 				},
 				{
 					label:
-						'📋 ' + __( 'Duplicate Row', 'wstech-table-builder' ),
+						'📋 ' +
+						__( 'Duplicate Row', 'wstech-visual-table-builder' ),
 					action: () =>
 						updateTable(
 							duplicateRow( tableData, contextMenu.row )
 						),
 				},
 				{
-					label: '🗑️ ' + __( 'Delete Row', 'wstech-table-builder' ),
+					label:
+						'🗑️ ' +
+						__( 'Delete Row', 'wstech-visual-table-builder' ),
 					action: () =>
 						updateTable( deleteRow( tableData, contextMenu.row ) ),
 					danger: true,
@@ -230,7 +236,10 @@ export default function Edit( { attributes, setAttributes } ) {
 				{
 					label:
 						'➕ ' +
-						__( 'Insert Column Before', 'wstech-table-builder' ),
+						__(
+							'Insert Column Before',
+							'wstech-visual-table-builder'
+						),
 					action: () =>
 						updateTable(
 							addColumnBefore( tableData, contextMenu.col )
@@ -239,7 +248,10 @@ export default function Edit( { attributes, setAttributes } ) {
 				{
 					label:
 						'➕ ' +
-						__( 'Insert Column After', 'wstech-table-builder' ),
+						__(
+							'Insert Column After',
+							'wstech-visual-table-builder'
+						),
 					action: () =>
 						updateTable(
 							addColumnAfter( tableData, contextMenu.col )
@@ -248,7 +260,7 @@ export default function Edit( { attributes, setAttributes } ) {
 				{
 					label:
 						'📋 ' +
-						__( 'Duplicate Column', 'wstech-table-builder' ),
+						__( 'Duplicate Column', 'wstech-visual-table-builder' ),
 					action: () =>
 						updateTable(
 							duplicateColumn( tableData, contextMenu.col )
@@ -256,7 +268,8 @@ export default function Edit( { attributes, setAttributes } ) {
 				},
 				{
 					label:
-						'🗑️ ' + __( 'Delete Column', 'wstech-table-builder' ),
+						'🗑️ ' +
+						__( 'Delete Column', 'wstech-visual-table-builder' ),
 					action: () =>
 						updateTable(
 							deleteColumn( tableData, contextMenu.col )
@@ -265,12 +278,16 @@ export default function Edit( { attributes, setAttributes } ) {
 				},
 				{ separator: true },
 				{
-					label: '🧹 ' + __( 'Clear Row', 'wstech-table-builder' ),
+					label:
+						'🧹 ' +
+						__( 'Clear Row', 'wstech-visual-table-builder' ),
 					action: () =>
 						updateTable( clearRow( tableData, contextMenu.row ) ),
 				},
 				{
-					label: '🧹 ' + __( 'Clear Column', 'wstech-table-builder' ),
+					label:
+						'🧹 ' +
+						__( 'Clear Column', 'wstech-visual-table-builder' ),
 					action: () =>
 						updateTable(
 							clearColumn( tableData, contextMenu.col )
@@ -402,7 +419,12 @@ export default function Edit( { attributes, setAttributes } ) {
 		return (
 			<div { ...blockProps }>
 				<div className="vtb-empty-state">
-					<p>{ __( 'Loading table…', 'wstech-table-builder' ) }</p>
+					<p>
+						{ __(
+							'Loading table…',
+							'wstech-visual-table-builder'
+						) }
+					</p>
 				</div>
 			</div>
 		);
@@ -471,7 +493,10 @@ export default function Edit( { attributes, setAttributes } ) {
 		<div
 			{ ...blockProps }
 			role="grid"
-			aria-label={ __( 'Visual table editor', 'wstech-table-builder' ) }
+			aria-label={ __(
+				'Visual table editor',
+				'wstech-visual-table-builder'
+			) }
 			tabIndex={ 0 }
 			onKeyDown={ handleKeyDown }
 		>
@@ -480,13 +505,13 @@ export default function Edit( { attributes, setAttributes } ) {
 				<ToolbarGroup>
 					<ToolbarButton
 						icon="undo"
-						label={ __( 'Undo', 'wstech-table-builder' ) }
+						label={ __( 'Undo', 'wstech-visual-table-builder' ) }
 						onClick={ handleUndo }
 						disabled={ undoStack.length === 0 }
 					/>
 					<ToolbarButton
 						icon="redo"
-						label={ __( 'Redo', 'wstech-table-builder' ) }
+						label={ __( 'Redo', 'wstech-visual-table-builder' ) }
 						onClick={ handleRedo }
 						disabled={ redoStack.length === 0 }
 					/>
@@ -495,7 +520,7 @@ export default function Edit( { attributes, setAttributes } ) {
 				<ToolbarGroup>
 					<ToolbarButton
 						icon="table-row-after"
-						label={ __( 'Add Row', 'wstech-table-builder' ) }
+						label={ __( 'Add Row', 'wstech-visual-table-builder' ) }
 						onClick={ () =>
 							updateTable(
 								addRowAfter(
@@ -507,7 +532,10 @@ export default function Edit( { attributes, setAttributes } ) {
 					/>
 					<ToolbarButton
 						icon="table-col-after"
-						label={ __( 'Add Column', 'wstech-table-builder' ) }
+						label={ __(
+							'Add Column',
+							'wstech-visual-table-builder'
+						) }
 						onClick={ () =>
 							updateTable(
 								addColumnAfter(
@@ -524,45 +552,48 @@ export default function Edit( { attributes, setAttributes } ) {
 						<ToolbarButton
 							label={ __(
 								'Merge Cells',
-								'wstech-table-builder'
+								'wstech-visual-table-builder'
 							) }
 							onClick={ handleMerge }
 						>
-							⊞ { __( 'Merge', 'wstech-table-builder' ) }
+							⊞ { __( 'Merge', 'wstech-visual-table-builder' ) }
 						</ToolbarButton>
 					) }
 					{ canUnmerge( selectedCells, tableData ) && (
 						<ToolbarButton
-							label={ __( 'Unmerge', 'wstech-table-builder' ) }
+							label={ __(
+								'Unmerge',
+								'wstech-visual-table-builder'
+							) }
 							onClick={ handleUnmerge }
 						>
-							⊟ { __( 'Unmerge', 'wstech-table-builder' ) }
+							⊟ { __( 'Unmerge', 'wstech-visual-table-builder' ) }
 						</ToolbarButton>
 					) }
 				</ToolbarGroup>
 
 				<ToolbarGroup>
 					<ToolbarButton onClick={ () => setShowTemplate( true ) }>
-						📋 { __( 'Templates', 'wstech-table-builder' ) }
+						📋 { __( 'Templates', 'wstech-visual-table-builder' ) }
 					</ToolbarButton>
 					<ToolbarButton onClick={ () => setShowImport( true ) }>
-						📥 { __( 'Import', 'wstech-table-builder' ) }
+						📥 { __( 'Import', 'wstech-visual-table-builder' ) }
 					</ToolbarButton>
 					<ToolbarDropdownMenu
 						icon="download"
-						label={ __( 'Export', 'wstech-table-builder' ) }
+						label={ __( 'Export', 'wstech-visual-table-builder' ) }
 						controls={ [
 							{
 								title: __(
 									'Export CSV',
-									'wstech-table-builder'
+									'wstech-visual-table-builder'
 								),
 								onClick: () => exportTableAsCSV( tableData ),
 							},
 							{
 								title: __(
 									'Export JSON',
-									'wstech-table-builder'
+									'wstech-visual-table-builder'
 								),
 								onClick: () => exportTableAsJSON( attributes ),
 							},
@@ -714,7 +745,7 @@ export default function Edit( { attributes, setAttributes } ) {
 								>
 									{ __(
 										'Background Color',
-										'wstech-table-builder'
+										'wstech-visual-table-builder'
 									) }
 								</p>
 								<ColorPalette
@@ -755,7 +786,7 @@ export default function Edit( { attributes, setAttributes } ) {
 								>
 									{ __(
 										'Text Color',
-										'wstech-table-builder'
+										'wstech-visual-table-builder'
 									) }
 								</p>
 								<ColorPalette
@@ -903,7 +934,7 @@ export default function Edit( { attributes, setAttributes } ) {
 															section === 'header'
 																? __(
 																		'Header',
-																		'wstech-table-builder'
+																		'wstech-visual-table-builder'
 																  )
 																: ''
 														}

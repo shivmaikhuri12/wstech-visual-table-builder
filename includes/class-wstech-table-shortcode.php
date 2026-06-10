@@ -62,14 +62,14 @@ class WSTech_Table_Shortcode {
 		// Validate that a post was found.
 		if ( ! $post ) {
 			return self::render_error(
-				__( 'Table not found. Please check the shortcode ID or slug.', 'wstech-table-builder' )
+				__( 'Table not found. Please check the shortcode ID or slug.', 'wstech-visual-table-builder' )
 			);
 		}
 
 		// Validate post type.
 		if ( 'wstech_table' !== $post->post_type ) {
 			return self::render_error(
-				__( 'The specified post is not a WSTech Table.', 'wstech-table-builder' )
+				__( 'The specified post is not a WSTech Table.', 'wstech-visual-table-builder' )
 			);
 		}
 
@@ -78,7 +78,7 @@ class WSTech_Table_Shortcode {
 			return self::render_error(
 				sprintf(
 					/* translators: %s: post status */
-					__( 'This table is not published (status: %s).', 'wstech-table-builder' ),
+					__( 'This table is not published (status: %s).', 'wstech-visual-table-builder' ),
 					$post->post_status
 				)
 			);
@@ -89,7 +89,7 @@ class WSTech_Table_Shortcode {
 
 		if ( empty( $raw_data ) ) {
 			return self::render_error(
-				__( 'No table data found for this table.', 'wstech-table-builder' )
+				__( 'No table data found for this table.', 'wstech-visual-table-builder' )
 			);
 		}
 
@@ -97,7 +97,7 @@ class WSTech_Table_Shortcode {
 
 		if ( ! is_array( $decoded ) ) {
 			return self::render_error(
-				__( 'Invalid table data format.', 'wstech-table-builder' )
+				__( 'Invalid table data format.', 'wstech-visual-table-builder' )
 			);
 		}
 
@@ -107,7 +107,7 @@ class WSTech_Table_Shortcode {
 
 		if ( empty( $table_data ) ) {
 			return self::render_error(
-				__( 'This table has no data.', 'wstech-table-builder' )
+				__( 'This table has no data.', 'wstech-visual-table-builder' )
 			);
 		}
 
@@ -148,7 +148,7 @@ class WSTech_Table_Shortcode {
 			'<div class="wstb-shortcode-error" style="border-left:4px solid #d63638;background:#fef7f7;padding:12px 16px;margin:16px 0;font-size:13px;color:#1d2327;">
 				<strong>%s</strong> %s
 			</div>',
-			esc_html__( 'WSTech Table Builder:', 'wstech-table-builder' ),
+			esc_html__( 'WSTech Table Builder:', 'wstech-visual-table-builder' ),
 			esc_html( $message )
 		);
 	}

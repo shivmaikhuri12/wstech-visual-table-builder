@@ -36,22 +36,22 @@ class WSTech_Table_CPT {
 	 */
 	public static function register_post_type() {
 		$labels = array(
-			'name'                  => _x( 'WSTech Tables', 'Post type general name', 'wstech-table-builder' ),
-			'singular_name'         => _x( 'Table', 'Post type singular name', 'wstech-table-builder' ),
-			'menu_name'             => __( 'WSTech Tables', 'wstech-table-builder' ),
-			'name_admin_bar'        => __( 'Table', 'wstech-table-builder' ),
-			'add_new'               => __( 'Add New', 'wstech-table-builder' ),
-			'add_new_item'          => __( 'Add New Table', 'wstech-table-builder' ),
-			'new_item'              => __( 'New Table', 'wstech-table-builder' ),
-			'edit_item'             => __( 'Edit Table', 'wstech-table-builder' ),
-			'view_item'             => __( 'View Table', 'wstech-table-builder' ),
-			'all_items'             => __( 'All Tables', 'wstech-table-builder' ),
-			'search_items'          => __( 'Search Tables', 'wstech-table-builder' ),
-			'not_found'             => __( 'No tables found.', 'wstech-table-builder' ),
-			'not_found_in_trash'    => __( 'No tables found in Trash.', 'wstech-table-builder' ),
-			'filter_items_list'     => __( 'Filter tables list', 'wstech-table-builder' ),
-			'items_list_navigation' => __( 'Tables list navigation', 'wstech-table-builder' ),
-			'items_list'            => __( 'Tables list', 'wstech-table-builder' ),
+			'name'                  => _x( 'WSTech Tables', 'Post type general name', 'wstech-visual-table-builder' ),
+			'singular_name'         => _x( 'Table', 'Post type singular name', 'wstech-visual-table-builder' ),
+			'menu_name'             => __( 'WSTech Tables', 'wstech-visual-table-builder' ),
+			'name_admin_bar'        => __( 'Table', 'wstech-visual-table-builder' ),
+			'add_new'               => __( 'Add New', 'wstech-visual-table-builder' ),
+			'add_new_item'          => __( 'Add New Table', 'wstech-visual-table-builder' ),
+			'new_item'              => __( 'New Table', 'wstech-visual-table-builder' ),
+			'edit_item'             => __( 'Edit Table', 'wstech-visual-table-builder' ),
+			'view_item'             => __( 'View Table', 'wstech-visual-table-builder' ),
+			'all_items'             => __( 'All Tables', 'wstech-visual-table-builder' ),
+			'search_items'          => __( 'Search Tables', 'wstech-visual-table-builder' ),
+			'not_found'             => __( 'No tables found.', 'wstech-visual-table-builder' ),
+			'not_found_in_trash'    => __( 'No tables found in Trash.', 'wstech-visual-table-builder' ),
+			'filter_items_list'     => __( 'Filter tables list', 'wstech-visual-table-builder' ),
+			'items_list_navigation' => __( 'Tables list navigation', 'wstech-visual-table-builder' ),
+			'items_list'            => __( 'Tables list', 'wstech-visual-table-builder' ),
 		);
 
 		$args = array(
@@ -100,8 +100,8 @@ class WSTech_Table_CPT {
 			$new_columns[ $key ] = $value;
 
 			if ( 'title' === $key ) {
-				$new_columns['table_id']  = __( 'Table ID', 'wstech-table-builder' );
-				$new_columns['shortcode'] = __( 'Shortcode', 'wstech-table-builder' );
+				$new_columns['table_id']  = __( 'Table ID', 'wstech-visual-table-builder' );
+				$new_columns['shortcode'] = __( 'Shortcode', 'wstech-visual-table-builder' );
 			}
 		}
 
@@ -125,11 +125,11 @@ class WSTech_Table_CPT {
 				$shortcode = '[wstech_table id="' . $post_id . '"]';
 				printf(
 					'<code class="wstb-shortcode-code" title="%s" data-shortcode="%s">%s</code> <span class="dashicons dashicons-clipboard wstb-copy-icon" data-shortcode="%s" title="%s"></span>',
-					esc_attr__( 'Click to copy', 'wstech-table-builder' ),
+					esc_attr__( 'Click to copy', 'wstech-visual-table-builder' ),
 					esc_attr( $shortcode ),
 					esc_html( $shortcode ),
 					esc_attr( $shortcode ),
-					esc_attr__( 'Copy shortcode', 'wstech-table-builder' )
+					esc_attr__( 'Copy shortcode', 'wstech-visual-table-builder' )
 				);
 				break;
 		}
@@ -158,15 +158,15 @@ class WSTech_Table_CPT {
 			'<a href="%s" aria-label="%s">%s</a>',
 			esc_url( $duplicate_url ),
 			/* translators: %s: table title */
-			esc_attr( sprintf( __( 'Duplicate &#8220;%s&#8221;', 'wstech-table-builder' ), $post->post_title ) ),
-			esc_html__( 'Duplicate', 'wstech-table-builder' )
+			esc_attr( sprintf( __( 'Duplicate &#8220;%s&#8221;', 'wstech-visual-table-builder' ), $post->post_title ) ),
+			esc_html__( 'Duplicate', 'wstech-visual-table-builder' )
 		);
 
 		$actions['wstb_copy_shortcode'] = sprintf(
 			'<a href="#" class="wstb-copy-shortcode-link" data-shortcode="%s" aria-label="%s">%s</a>',
 			esc_attr( $shortcode ),
-			esc_attr__( 'Copy shortcode to clipboard', 'wstech-table-builder' ),
-			esc_html__( 'Copy Shortcode', 'wstech-table-builder' )
+			esc_attr__( 'Copy shortcode to clipboard', 'wstech-visual-table-builder' ),
+			esc_html__( 'Copy Shortcode', 'wstech-visual-table-builder' )
 		);
 
 		return $actions;
@@ -180,7 +180,7 @@ class WSTech_Table_CPT {
 	public static function add_meta_boxes() {
 		add_meta_box(
 			'wstb_embed_table',
-			__( 'Embed This Table', 'wstech-table-builder' ),
+			__( 'Embed This Table', 'wstech-visual-table-builder' ),
 			array( __CLASS__, 'render_shortcode_meta_box' ),
 			'wstech_table',
 			'side',
@@ -200,7 +200,7 @@ class WSTech_Table_CPT {
 		<div class="wstb-embed-metabox">
 			<p>
 				<label for="wstb-shortcode-field">
-					<strong><?php esc_html_e( 'Shortcode:', 'wstech-table-builder' ); ?></strong>
+					<strong><?php esc_html_e( 'Shortcode:', 'wstech-visual-table-builder' ); ?></strong>
 				</label>
 			</p>
 			<div class="wstb-embed-copy-row">
@@ -215,7 +215,7 @@ class WSTech_Table_CPT {
 					type="button"
 					class="button wstb-copy-btn"
 					data-shortcode="<?php echo esc_attr( $shortcode ); ?>"
-					title="<?php esc_attr_e( 'Copy to clipboard', 'wstech-table-builder' ); ?>"
+					title="<?php esc_attr_e( 'Copy to clipboard', 'wstech-visual-table-builder' ); ?>"
 				>
 					<span class="dashicons dashicons-clipboard"></span>
 				</button>
@@ -223,10 +223,10 @@ class WSTech_Table_CPT {
 
 			<div class="wstb-embed-instructions">
 				<p class="description">
-					<?php esc_html_e( 'Paste this shortcode into any post, page, or widget area to embed this table.', 'wstech-table-builder' ); ?>
+					<?php esc_html_e( 'Paste this shortcode into any post, page, or widget area to embed this table.', 'wstech-visual-table-builder' ); ?>
 				</p>
 				<p class="description wstb-slug-description">
-					<?php esc_html_e( 'You can also use the slug:', 'wstech-table-builder' ); ?>
+					<?php esc_html_e( 'You can also use the slug:', 'wstech-visual-table-builder' ); ?>
 					<br />
 					<code class="wstb-shortcode-example">[wstech_table slug="<?php echo esc_html( $post->post_name ); ?>"]</code>
 				</p>
@@ -310,8 +310,8 @@ class WSTech_Table_CPT {
 		wp_register_script( 'wstb-admin-shortcode', false, array(), WSTB_VERSION, true );
 		wp_enqueue_script( 'wstb-admin-shortcode' );
 
-		$copied_message = wp_json_encode( __( 'Shortcode copied to clipboard.', 'wstech-table-builder' ) );
-		$failed_message = wp_json_encode( __( 'Failed to copy. Please copy manually.', 'wstech-table-builder' ) );
+		$copied_message = wp_json_encode( __( 'Shortcode copied to clipboard.', 'wstech-visual-table-builder' ) );
+		$failed_message = wp_json_encode( __( 'Failed to copy. Please copy manually.', 'wstech-visual-table-builder' ) );
 
 		wp_add_inline_script(
 			'wstb-admin-shortcode',

@@ -160,7 +160,10 @@ import { __, sprintf } from '@wordpress/i18n';
 				if ( pageInfo ) {
 					pageInfo.textContent = sprintf(
 						/* translators: 1: Current page number, 2: Total pages. */
-						__( 'Page %1$d of %2$d', 'wstech-table-builder' ),
+						__(
+							'Page %1$d of %2$d',
+							'wstech-visual-table-builder'
+						),
 						currentPage,
 						totalPages || 1
 					);

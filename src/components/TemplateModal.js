@@ -27,14 +27,17 @@ export default function TemplateModal( { isOpen, onClose, onSelect } ) {
 
 	return (
 		<Modal
-			title={ __( '📋 Choose a Template', 'wstech-table-builder' ) }
+			title={ __(
+				'📋 Choose a Template',
+				'wstech-visual-table-builder'
+			) }
 			onRequestClose={ onClose }
 			className="vtb-template-modal"
 		>
 			<p className="vtb-template-subtitle">
 				{ __(
 					'Start quickly with a pre-designed table template. All templates are fully customisable after insertion.',
-					'wstech-table-builder'
+					'wstech-visual-table-builder'
 				) }
 			</p>
 
@@ -68,7 +71,7 @@ export default function TemplateModal( { isOpen, onClose, onSelect } ) {
 
 			<div className="vtb-template-footer">
 				<Button variant="tertiary" onClick={ onClose }>
-					{ __( 'Cancel', 'wstech-table-builder' ) }
+					{ __( 'Cancel', 'wstech-visual-table-builder' ) }
 				</Button>
 			</div>
 		</Modal>

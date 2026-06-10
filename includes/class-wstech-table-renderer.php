@@ -114,7 +114,7 @@ class WSTech_Table_Renderer {
 		// Search bar.
 		if ( ! empty( $settings['searchable'] ) ) {
 			$output .= '<div class="vtb-search-bar">';
-			$output .= '<input type="text" class="vtb-search-input" placeholder="' . esc_attr__( 'Search table…', 'wstech-table-builder' ) . '" aria-label="' . esc_attr__( 'Search table', 'wstech-table-builder' ) . '" />';
+			$output .= '<input type="text" class="vtb-search-input" placeholder="' . esc_attr__( 'Search table…', 'wstech-visual-table-builder' ) . '" aria-label="' . esc_attr__( 'Search table', 'wstech-visual-table-builder' ) . '" />';
 			$output .= '</div>';
 		}
 
@@ -204,14 +204,14 @@ class WSTech_Table_Renderer {
 
 			if ( ! empty( $settings['pagination'] ) ) {
 				$output .= '<div class="vtb-pagination">';
-				$output .= '<button class="vtb-page-btn vtb-prev" aria-label="' . esc_attr__( 'Previous page', 'wstech-table-builder' ) . '">' . esc_html__( '← Prev', 'wstech-table-builder' ) . '</button>';
+				$output .= '<button class="vtb-page-btn vtb-prev" aria-label="' . esc_attr__( 'Previous page', 'wstech-visual-table-builder' ) . '">' . esc_html__( '← Prev', 'wstech-visual-table-builder' ) . '</button>';
 				$output .= '<span class="vtb-page-info" aria-live="polite"></span>';
-				$output .= '<button class="vtb-page-btn vtb-next" aria-label="' . esc_attr__( 'Next page', 'wstech-table-builder' ) . '">' . esc_html__( 'Next →', 'wstech-table-builder' ) . '</button>';
+				$output .= '<button class="vtb-page-btn vtb-next" aria-label="' . esc_attr__( 'Next page', 'wstech-visual-table-builder' ) . '">' . esc_html__( 'Next →', 'wstech-visual-table-builder' ) . '</button>';
 				$output .= '</div>';
 			}
 
 			if ( ! empty( $settings['frontendCsvExport'] ) ) {
-				$output .= '<button class="vtb-csv-btn" aria-label="' . esc_attr__( 'Export table as CSV', 'wstech-table-builder' ) . '">' . esc_html__( '⬇ Export CSV', 'wstech-table-builder' ) . '</button>';
+				$output .= '<button class="vtb-csv-btn" aria-label="' . esc_attr__( 'Export table as CSV', 'wstech-visual-table-builder' ) . '">' . esc_html__( '⬇ Export CSV', 'wstech-visual-table-builder' ) . '</button>';
 			}
 
 			$output .= '</div>'; // .vtb-footer-bar

@@ -37,7 +37,10 @@ export default function ImportModal( { isOpen, onClose, onImport } ) {
 	const handleCSVPaste = () => {
 		if ( ! csvText.trim() ) {
 			setError(
-				__( 'Please paste CSV data first.', 'wstech-table-builder' )
+				__(
+					'Please paste CSV data first.',
+					'wstech-visual-table-builder'
+				)
 			);
 			return;
 		}
@@ -47,7 +50,7 @@ export default function ImportModal( { isOpen, onClose, onImport } ) {
 				setError(
 					__(
 						'No data found in pasted text.',
-						'wstech-table-builder'
+						'wstech-visual-table-builder'
 					)
 				);
 				return;
@@ -73,7 +76,10 @@ export default function ImportModal( { isOpen, onClose, onImport } ) {
 			const result = await readCSVFile( file );
 			if ( ! result.tableData.length ) {
 				setError(
-					__( 'No data found in file.', 'wstech-table-builder' )
+					__(
+						'No data found in file.',
+						'wstech-visual-table-builder'
+					)
 				);
 				return;
 			}
@@ -100,7 +106,7 @@ export default function ImportModal( { isOpen, onClose, onImport } ) {
 			const attrs = await importTableFromJSON( file );
 			onImport( attrs.tableData, attrs );
 			setSuccess(
-				__( 'Table imported from JSON!', 'wstech-table-builder' )
+				__( 'Table imported from JSON!', 'wstech-visual-table-builder' )
 			);
 			setTimeout( () => {
 				onClose();
@@ -142,14 +148,17 @@ export default function ImportModal( { isOpen, onClose, onImport } ) {
 	const acceptTypes =
 		activeTab === 'csv' ? '.csv,.tsv,.txt' : '.json,.vtb.json';
 	const csvPlaceholder = [
-		__( 'Paste CSV data here…', 'wstech-table-builder' ),
-		__( 'Name, Email, Phone', 'wstech-table-builder' ),
-		__( 'John, john@email.com, 123–456', 'wstech-table-builder' ),
+		__( 'Paste CSV data here…', 'wstech-visual-table-builder' ),
+		__( 'Name, Email, Phone', 'wstech-visual-table-builder' ),
+		__( 'John, john@email.com, 123–456', 'wstech-visual-table-builder' ),
 	].join( '\n' );
 
 	return (
 		<Modal
-			title={ __( '📥 Import Table Data', 'wstech-table-builder' ) }
+			title={ __(
+				'📥 Import Table Data',
+				'wstech-visual-table-builder'
+			) }
 			onRequestClose={ () => {
 				onClose();
 				resetState();
@@ -163,7 +172,7 @@ export default function ImportModal( { isOpen, onClose, onImport } ) {
 					}` }
 					onClick={ () => handleTabChange( 'csv' ) }
 				>
-					📄 { __( 'CSV Import', 'wstech-table-builder' ) }
+					📄 { __( 'CSV Import', 'wstech-visual-table-builder' ) }
 				</button>
 				<button
 					className={ `vtb-import-tab ${
@@ -171,7 +180,7 @@ export default function ImportModal( { isOpen, onClose, onImport } ) {
 					}` }
 					onClick={ () => handleTabChange( 'json' ) }
 				>
-					📋 { __( 'JSON Import', 'wstech-table-builder' ) }
+					📋 { __( 'JSON Import', 'wstech-visual-table-builder' ) }
 				</button>
 			</div>
 
@@ -210,11 +219,11 @@ export default function ImportModal( { isOpen, onClose, onImport } ) {
 					{ activeTab === 'csv'
 						? __(
 								'Drop a CSV file here, or click to browse',
-								'wstech-table-builder'
+								'wstech-visual-table-builder'
 						  )
 						: __(
 								'Drop a .vtb.json file here, or click to browse',
-								'wstech-table-builder'
+								'wstech-visual-table-builder'
 						  ) }
 				</p>
 			</button>
@@ -232,7 +241,7 @@ export default function ImportModal( { isOpen, onClose, onImport } ) {
 						<span>
 							{ __(
 								'or paste CSV data',
-								'wstech-table-builder'
+								'wstech-visual-table-builder'
 							) }
 						</span>
 					</div>
@@ -246,7 +255,7 @@ export default function ImportModal( { isOpen, onClose, onImport } ) {
 						<Button variant="primary" onClick={ handleCSVPaste }>
 							{ __(
 								'Import Pasted Data',
-								'wstech-table-builder'
+								'wstech-visual-table-builder'
 							) }
 						</Button>
 						<Button
@@ -256,7 +265,7 @@ export default function ImportModal( { isOpen, onClose, onImport } ) {
 								resetState();
 							} }
 						>
-							{ __( 'Cancel', 'wstech-table-builder' ) }
+							{ __( 'Cancel', 'wstech-visual-table-builder' ) }
 						</Button>
 					</div>
 				</>
@@ -267,7 +276,7 @@ export default function ImportModal( { isOpen, onClose, onImport } ) {
 					<p>
 						{ __(
 							'Import a previously exported .vtb.json file to restore a complete table with all settings, styles, and data.',
-							'wstech-table-builder'
+							'wstech-visual-table-builder'
 						) }
 					</p>
 				</div>

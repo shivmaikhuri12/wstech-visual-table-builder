@@ -106,7 +106,7 @@ A professional WordPress table builder with drag-and-drop editing, merge cells, 
 
 == Installation ==
 
-1. Upload the `wstech-table-builder` folder to `/wp-content/plugins/`
+1. Upload the `wstech-visual-table-builder` folder to `/wp-content/plugins/`
 2. Activate the plugin through the **Plugins** menu
 3. Go to **WSTech Tables → Add New** to create your first reusable table
 4. Or add the **Visual Table Builder** block directly in any post/page
@@ -186,7 +186,7 @@ Major release. Adds reusable tables, shortcodes, admin management, and universal
 
 **Building from source:**
 ```
-cd wp-content/plugins/wstech-table-builder
+cd wp-content/plugins/wstech-visual-table-builder
 npm install
 npm run build
 ```

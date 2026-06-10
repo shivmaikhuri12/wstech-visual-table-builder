@@ -125,7 +125,7 @@ export function readCSVFile( file ) {
 		reader.onerror = () =>
 			reject(
 				new Error(
-					__( 'Failed to read file.', 'wstech-table-builder' )
+					__( 'Failed to read file.', 'wstech-visual-table-builder' )
 				)
 			);
 		reader.readAsText( file );

@@ -8,7 +8,11 @@
 import { __, sprintf } from '@wordpress/i18n';
 import { normalizeTableData } from './tableHelpers';
 
-const PLUGIN_SIGNATURE = 'wstech-table-builder';
+const PLUGIN_SIGNATURE = 'wstech-visual-table-builder';
+const LEGACY_PLUGIN_SIGNATURES = [
+	'wstech-table-builder',
+	'visual-table-builder',
+];
 const FORMAT_VERSION = 1;
 
 /**
@@ -71,13 +75,13 @@ export function importTableFromJSON( file ) {
 				// Validate signature
 				if (
 					data.plugin !== PLUGIN_SIGNATURE &&
-					data.plugin !== 'visual-table-builder'
+					! LEGACY_PLUGIN_SIGNATURES.includes( data.plugin )
 				) {
 					reject(
 						new Error(
 							__(
 								'Invalid file: Not a WSTech Table Builder export.',
-								'wstech-table-builder'
+								'wstech-visual-table-builder'
 							)
 						)
 					);
@@ -89,7 +93,7 @@ export function importTableFromJSON( file ) {
 						new Error(
 							__(
 								'Invalid file: No table data found.',
-								'wstech-table-builder'
+								'wstech-visual-table-builder'
 							)
 						)
 					);
@@ -112,7 +116,7 @@ export function importTableFromJSON( file ) {
 							/* translators: %s: JSON parser error message. */
 							__(
 								'Failed to parse JSON: %s',
-								'wstech-table-builder'
+								'wstech-visual-table-builder'
 							),
 							err.message
 						)
@@ -123,7 +127,7 @@ export function importTableFromJSON( file ) {
 		reader.onerror = () =>
 			reject(
 				new Error(
-					__( 'Failed to read file.', 'wstech-table-builder' )
+					__( 'Failed to read file.', 'wstech-visual-table-builder' )
 				)
 			);
 		reader.readAsText( file );
