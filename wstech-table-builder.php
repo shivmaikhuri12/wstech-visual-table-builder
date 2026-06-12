@@ -342,13 +342,6 @@ function wstb_plugin_row_meta( $links, $file ) {
 
 	$links[] = sprintf(
 		'<a href="%s" class="thickbox open-plugin-details-modal" aria-label="%s">%s</a>',
-		esc_url( wstb_plugin_information_url() ),
-		esc_attr__( 'View WSTech Visual Table Builder details', 'wstech-visual-table-builder' ),
-		esc_html__( 'View details', 'wstech-visual-table-builder' )
-	);
-
-	$links[] = sprintf(
-		'<a href="%s" class="thickbox open-plugin-details-modal" aria-label="%s">%s</a>',
 		esc_url( wstb_plugin_information_url( 'docs' ) ),
 		esc_attr__( 'Open WSTech Visual Table Builder documentation', 'wstech-visual-table-builder' ),
 		esc_html__( 'Docs', 'wstech-visual-table-builder' )
@@ -422,7 +415,7 @@ function wstb_plugin_information_sections() {
 		'description'  => implode(
 			"\n",
 			array(
-				'<h2>Build professional WordPress tables without code</h2>',
+				'<p><strong>Build professional WordPress tables without code.</strong></p>',
 				'<p><strong>WSTech Visual Table Builder</strong> adds a focused table-building workflow to WordPress. You can create tables visually, save reusable tables in the admin, embed them with shortcodes, or place an inline table directly inside the block editor.</p>',
 				'<p>The plugin is designed for real content tables: pricing tables, employee directories, invoice rows, project trackers, class timetables, nutrition facts, comparison charts, schedules, and searchable data tables.</p>',
 				'<h3>Best ways to use it</h3>',
@@ -437,7 +430,7 @@ function wstb_plugin_information_sections() {
 		'features'     => implode(
 			"\n",
 			array(
-				'<h2>Included Features</h2>',
+				'<p><strong>Included features for building reusable, responsive WordPress tables.</strong></p>',
 				'<h3>Reusable table management</h3>',
 				'<ul>',
 				'<li>Dedicated <strong>WSTech Tables</strong> admin area for creating and managing reusable tables.</li>',
@@ -472,7 +465,7 @@ function wstb_plugin_information_sections() {
 		'installation' => implode(
 			"\n",
 			array(
-				'<h2>Installation</h2>',
+				'<p><strong>Install and publish your first table in a few minutes.</strong></p>',
 				'<ol>',
 				'<li>Upload the <code>wstech-visual-table-builder</code> plugin ZIP from <strong>Plugins &rarr; Add New &rarr; Upload Plugin</strong>.</li>',
 				'<li>Activate <strong>WSTech Visual Table Builder</strong> from the Plugins screen.</li>',
@@ -492,7 +485,7 @@ function wstb_plugin_information_sections() {
 		'docs'         => implode(
 			"\n",
 			array(
-				'<h2>Documentation</h2>',
+				'<p><strong>Documentation for common WSTech Visual Table Builder workflows.</strong></p>',
 				'<h3>Create a reusable table</h3>',
 				'<ol>',
 				'<li>Open <a href="' . $add_table_url . '" target="_parent">WSTech Tables &rarr; Add New</a>.</li>',
@@ -520,12 +513,16 @@ function wstb_plugin_information_sections() {
 				'</ul>',
 				'<h3>Frontend controls</h3>',
 				'<p>Open the block sidebar and enable sorting, search, pagination, hover highlight, and CSV export only for the tables that need those visitor-facing controls.</p>',
+				'<h3>Responsive modes</h3>',
+				'<p>Use horizontal scroll for wide comparison tables, or Stack on Mobile when each row should become a compact card with column labels on small screens.</p>',
+				'<h3>Back up a table</h3>',
+				'<p>Use JSON export to download a complete <code>.vtb.json</code> backup that includes rows, columns, merged cells, styling, captions, and frontend settings.</p>',
 			)
 		),
 		'shortcodes'   => implode(
 			"\n",
 			array(
-				'<h2>Shortcodes</h2>',
+				'<p><strong>Shortcodes let you reuse the same saved table anywhere WordPress accepts content.</strong></p>',
 				'<p>Shortcodes are available for reusable tables created in <strong>WSTech Tables</strong>. Publish the table first, then copy the shortcode from the sidebar or from the tables list screen.</p>',
 				'<h3>Embed by table ID</h3>',
 				'<p><code>[wstech_table id=&quot;123&quot;]</code></p>',
@@ -544,24 +541,34 @@ function wstb_plugin_information_sections() {
 				'<li>Classic Editor content area.</li>',
 				'<li>Theme template files through <code>do_shortcode()</code>.</li>',
 				'</ul>',
+				'<h3>Troubleshooting</h3>',
+				'<p>If a shortcode does not render, confirm that the table is published and that the ID or slug matches the reusable table.</p>',
 			)
 		),
 		'faq'          => implode(
 			"\n",
 			array(
-				'<h2>Frequently Asked Questions</h2>',
+				'<p><strong>Frequently asked questions about creating, embedding, and managing tables.</strong></p>',
 				'<h3>How do I start with the plugin?</h3>',
 				'<p>Go to <a href="' . $add_table_url . '" target="_parent">WSTech Tables &rarr; Add New</a>, build your table, publish it, copy the shortcode, and paste it where you want the table to appear.</p>',
 				'<h3>How do I use it with Elementor?</h3>',
 				'<p>Create a reusable table, copy the shortcode, then paste it into an Elementor Shortcode widget.</p>',
+				'<h3>How do I use shortcodes?</h3>',
+				'<p>Use <code>[wstech_table id=&quot;123&quot;]</code> for the most stable embed, or <code>[wstech_table slug=&quot;pricing-table&quot;]</code> when you prefer a readable shortcode.</p>',
 				'<h3>Can the same table appear on multiple pages?</h3>',
 				'<p>Yes. Use the same shortcode anywhere. When you edit the original reusable table, every embedded copy updates automatically.</p>',
+				'<h3>Is the plugin mobile responsive?</h3>',
+				'<p>Yes. Tables can use horizontal scrolling or Stack on Mobile mode, which turns each row into a card-like layout with labels.</p>',
 				'<h3>Can I use it without shortcodes?</h3>',
 				'<p>Yes. Add the Visual Table Builder block directly inside any block-editor page or post.</p>',
 				'<h3>Can I import from Excel or Google Sheets?</h3>',
 				'<p>Yes. Export your spreadsheet as CSV, then use the Import button in the block toolbar.</p>',
+				'<h3>Can I export tables?</h3>',
+				'<p>Yes. Export CSV for spreadsheet use, or export JSON when you need a full backup that preserves table styles and settings.</p>',
 				'<h3>How do I merge cells?</h3>',
 				'<p>Shift-click to select a rectangular group of cells, then click Merge in the table toolbar. Select a merged cell and click Unmerge to split it again.</p>',
+				'<h3>Does it work with Gutenberg?</h3>',
+				'<p>Yes. The plugin includes a native Gutenberg block and also supports reusable tables through the WordPress Shortcode block.</p>',
 				'<h3>Why is my shortcode not showing a table?</h3>',
 				'<p>Check that the table exists, is published, and the shortcode ID or slug is correct. Admin users will see a helpful shortcode error message when a table cannot be resolved.</p>',
 			)
@@ -569,7 +576,7 @@ function wstb_plugin_information_sections() {
 		'changelog'    => implode(
 			"\n",
 			array(
-				'<h2>Changelog</h2>',
+				'<p><strong>Release history for WSTech Visual Table Builder.</strong></p>',
 				'<h3>2.0.0</h3>',
 				'<ul>',
 				'<li>Added reusable table management through the WSTech Tables custom post type.</li>',

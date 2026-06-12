@@ -104,14 +104,124 @@ A professional WordPress table builder with drag-and-drop editing, merge cells, 
 2. Design your table directly in the post
 3. Save the post — your table is live!
 
+== Features ==
+
+= Drag & Drop Table Builder =
+Build tables directly in the WordPress editor using a visual grid. Click any cell to edit content, use toolbar controls for common formatting, and reorder rows or columns with drag and drop controls. The editor is designed for people who need spreadsheet-style table control without writing HTML.
+
+= Merge Cells =
+Create more advanced table layouts with colspan and rowspan support. Select a rectangular group of cells, merge them into one larger cell, and unmerge later when the layout needs to change. This is useful for pricing tables, schedules, invoice totals, grouped comparison rows, and table headings.
+
+= Responsive Tables =
+Choose between horizontal scroll mode and Stack on Mobile mode. Horizontal scroll keeps wide tables intact on smaller screens, while Stack on Mobile turns rows into compact vertical cards with column labels.
+
+= CSV Import and Export =
+Import CSV files from Excel, Google Sheets, LibreOffice, or pasted spreadsheet data. Export CSV from the editor, and optionally enable a frontend CSV export button for visitors when a table needs downloadable data.
+
+= JSON Backup and Restore =
+Export a full `.vtb.json` backup that includes table content, merged cells, styles, captions, responsive settings, sorting, search, pagination, and other table options. Import the JSON file later to restore the table state.
+
+= Reusable Tables =
+Create tables in **WSTech Tables → Add New**, publish them once, and embed them across multiple pages. Updating the saved table updates every shortcode instance automatically.
+
+= Shortcodes =
+Embed reusable tables with `[wstech_table id="123"]` or `[wstech_table slug="pricing-table"]`. Shortcodes work in posts, pages, widgets, Classic Editor, Elementor, Divi, Beaver Builder, and PHP templates.
+
+= Search and Pagination =
+Enable live search to help visitors filter table rows instantly. Enable pagination when a table has many rows and should be split into smaller page sets.
+
+= Templates =
+Start faster with built-in templates including blank table, employee directory, pricing table, product comparison, invoice, class timetable, sports standings, project tracker, budget tracker, and nutrition facts.
+
+= Gutenberg Integration =
+Use the native **Visual Table Builder** block for inline tables, or use the WordPress Shortcode block to insert reusable tables created from the WSTech Tables admin screen.
+
 == Installation ==
 
-1. Upload the `wstech-visual-table-builder` folder to `/wp-content/plugins/`
-2. Activate the plugin through the **Plugins** menu
-3. Go to **WSTech Tables → Add New** to create your first reusable table
-4. Or add the **Visual Table Builder** block directly in any post/page
+1. Download the plugin ZIP file.
+2. In WordPress admin, go to **Plugins → Add New → Upload Plugin**.
+3. Select the `wstech-visual-table-builder.zip` file and click **Install Now**.
+4. Activate **WSTech Visual Table Builder** from the Plugins screen.
+5. Go to **WSTech Tables → Add New** to create a reusable table.
+6. Publish the table and copy the shortcode from the sidebar or table list.
+7. Paste the shortcode into a post, page, widget, builder module, or template.
+8. For one-off tables, edit any post or page and add the **Visual Table Builder** block directly.
+
+= Manual Installation =
+
+1. Extract the plugin ZIP.
+2. Upload the `wstech-visual-table-builder` folder to `/wp-content/plugins/`.
+3. Activate the plugin from **Plugins → Installed Plugins**.
+4. Confirm that **WSTech Tables** appears in the WordPress admin menu.
+
+= First Table Setup =
+
+1. Go to **WSTech Tables → Add New**.
+2. Add a title for admin reference.
+3. Build your table manually or start from a template.
+4. Configure header row, footer row, theme, responsive mode, search, sorting, and pagination as needed.
+5. Publish the table.
+6. Copy the generated shortcode and embed it where the table should appear.
+
+== Docs ==
+
+= Creating a Reusable Table =
+Reusable tables are best when the same table needs to appear in more than one place. Create the table under **WSTech Tables**, publish it, and use its shortcode anywhere. When the table is edited later, all embedded instances update automatically.
+
+= Creating an Inline Gutenberg Table =
+For a table that only belongs to one post or page, add the **Visual Table Builder** block directly in the Gutenberg editor. Inline tables are stored with the post content.
+
+= Importing CSV Data =
+Use **Import → CSV** in the table toolbar. You can upload a CSV file or paste CSV text. The importer detects common delimiters such as commas, tabs, semicolons, and pipes.
+
+= Exporting Table Data =
+Use CSV export when you need spreadsheet-compatible data. Use JSON export when you need a full backup of table content, styles, merged cells, and display settings.
+
+= Frontend Data Controls =
+Sorting, search, pagination, hover highlighting, and frontend CSV export are optional per table. Enable only the features each table needs.
+
+= Responsive Display =
+Use horizontal scroll for wide technical or comparison tables. Use Stack on Mobile for directory, pricing, or feature-list tables where each row should become a readable mobile card.
+
+== Shortcodes ==
+
+= Embed by Table ID =
+
+`[wstech_table id="123"]`
+
+This is the recommended shortcode because the numeric ID does not change.
+
+= Embed by Table Slug =
+
+`[wstech_table slug="pricing-table"]`
+
+This is useful for readable shortcodes. If the table slug changes, update the shortcode.
+
+= Use in PHP Templates =
+
+`<?php echo do_shortcode( '[wstech_table id="123"]' ); ?>`
+
+= Where Shortcodes Work =
+
+* WordPress Shortcode block
+* Classic Editor
+* Elementor Shortcode widget
+* Divi Code module
+* Beaver Builder shortcode/HTML module
+* Widget areas that support shortcodes
+* Theme templates with `do_shortcode()`
+
+= Shortcode Troubleshooting =
+
+If a shortcode does not display a table, confirm that the table exists, is published, and that the shortcode ID or slug is correct.
 
 == Frequently Asked Questions ==
+
+= How do I create a table? =
+Go to **WSTech Tables → Add New**, enter a title, build the table visually, configure the table settings, and click **Publish**. Copy the shortcode shown in the sidebar to embed the table.
+
+= How do I use shortcodes? =
+Use `[wstech_table id="123"]` for a saved table ID or `[wstech_table slug="pricing-table"]` for a saved table slug. Paste the shortcode anywhere WordPress supports shortcodes.
 
 = How do I embed a table in Elementor? =
 Create a table in WSTech Tables → Add New, publish it, copy the shortcode, then paste it into an **Elementor Shortcode Widget**.
@@ -119,17 +229,32 @@ Create a table in WSTech Tables → Add New, publish it, copy the shortcode, the
 = Can I use the same table on multiple pages? =
 Yes! Create the table once in WSTech Tables, then paste the same shortcode on as many pages as you want. Editing the table updates it everywhere.
 
+= Is the plugin mobile responsive? =
+Yes. Use horizontal scroll mode for wide tables or Stack on Mobile mode to turn each row into a labeled mobile layout.
+
 = Does it work with Classic Editor? =
 Yes. Use the shortcode `[wstech_table id="123"]` in the Classic Editor text area.
 
 = Can I import data from Excel? =
 Yes. Export your Excel data as CSV, then use the **Import CSV** button in the block toolbar.
 
+= Can I import CSV files? =
+Yes. Upload a CSV file or paste CSV content into the importer. The plugin detects common delimiters and converts rows into table cells.
+
+= Can I export tables? =
+Yes. Use CSV export for spreadsheet data, or JSON export for a full table backup that includes styles and settings.
+
 = How does sorting work? =
 When you enable **Sortable Columns** in the sidebar, visitors can click any column header to sort. Sorting is numeric-aware and works entirely client-side.
 
 = Can I merge cells? =
 Yes. Shift+click to select a rectangular range, then click **Merge Cells** in the format bar.
+
+= Does it work with Gutenberg? =
+Yes. The plugin includes a native Gutenberg block for inline tables and also supports reusable tables through the Shortcode block.
+
+= Can I reuse tables? =
+Yes. Tables created in **WSTech Tables** can be embedded on multiple pages with the same shortcode.
 
 = Where is the source code for the compiled block assets? =
 The public source repository is https://github.com/shivmaikhuri12/wstech-visual-table-builder. Editable files are in `src/`, compiled files are in `build/`, and the production build can be regenerated with `npm install` followed by `npm run build`.
