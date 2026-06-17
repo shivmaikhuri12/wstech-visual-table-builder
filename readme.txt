@@ -5,7 +5,7 @@ Tags: table, gutenberg, table-builder, responsive-table, shortcode
 Requires at least: 6.2
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 2.0.0
+Stable tag: 2.0.1
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -270,6 +270,9 @@ The public source repository is https://github.com/shivmaikhuri12/wstech-visual-
 
 == Changelog ==
 
+= 2.0.1 =
+* Fixed release metadata so the plugin version header, stable tag, and WordPress.org SVN tag match.
+
 = 2.0.0 =
 * NEW: Reusable Table Management via Custom Post Type
 * NEW: Shortcode support `[wstech_table id="123"]` and `[wstech_table slug="name"]`
@@ -298,8 +301,8 @@ The public source repository is https://github.com/shivmaikhuri12/wstech-visual-
 
 == Upgrade Notice ==
 
-= 2.0.0 =
-Major release. Adds reusable tables, shortcodes, admin management, and universal builder compatibility.
+= 2.0.1 =
+Maintenance release. Fixes WordPress.org release metadata for the 2.0.1 SVN tag.
 
 == Developer Notes ==
 
