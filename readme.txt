@@ -1,7 +1,7 @@
 === WSTech Visual Table Builder ===
 Contributors: shivmaikhuri
 Donate link: https://wstech.in/donate
-Tags: table, gutenberg, table-builder, responsive-table, shortcode
+Tags: table builder, pricing table, comparison table, responsive table, data table
 Requires at least: 6.2
 Tested up to: 7.0
 Requires PHP: 7.4
@@ -9,11 +9,13 @@ Stable tag: 2.0.1
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-A professional WordPress table builder with drag-and-drop editing, merge cells, templates, CSV/JSON import, shortcodes, and reusable table management.
+Build responsive pricing tables, comparison tables, feature matrices and data tables with drag-and-drop editing, templates, sorting and search.
 
 == Description ==
 
-**WSTech Visual Table Builder** is a powerful Gutenberg block plugin that brings MS Word/Excel-style table creation directly into WordPress — no coding required. Create reusable tables, manage them centrally, and embed them anywhere via shortcodes.
+**WSTech Visual Table Builder** is a Gutenberg table builder for creating responsive pricing tables, comparison tables, feature matrices, and structured data tables without code.
+
+Build tables visually with drag-and-drop editing, merged cells, templates, sorting, search, pagination, CSV import/export, and mobile display controls. Create reusable tables once and insert them anywhere with shortcodes, or build inline tables directly in Gutenberg.
 
 = ✨ Key Features =
 
@@ -261,12 +263,12 @@ The public source repository is https://github.com/shivmaikhuri12/wstech-visual-
 
 == Screenshots ==
 
-1. The Visual Table Builder block in the Gutenberg editor
-2. WSTech Tables admin management screen
-3. Template picker with 10 built-in templates
-4. CSV/JSON Import modal
-5. Frontend table with sorting, search, pagination
-6. Shortcode embedding in Elementor
+1. Gutenberg table builder for creating pricing, comparison, and data tables
+2. WSTech Tables admin screen for managing reusable tables
+3. Template picker with pricing table, product comparison, and other built-in layouts
+4. CSV and JSON import modal for adding or restoring table data
+5. Responsive data table with sorting, search, and pagination
+6. Reusable table shortcode embedded in Elementor
 
 == Changelog ==
 
