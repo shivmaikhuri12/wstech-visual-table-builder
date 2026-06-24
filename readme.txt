@@ -5,17 +5,21 @@ Tags: table builder, pricing table, comparison table, responsive table, data tab
 Requires at least: 6.2
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 2.0.1
+Stable tag: 2.0.2
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-Build responsive pricing tables, comparison tables, feature matrices and data tables with drag-and-drop editing, templates, sorting and search.
+Create responsive pricing, comparison and data tables in Gutenberg with visual editing, reusable shortcodes, sorting, search and CSV import/export.
 
 == Description ==
 
-**WSTech Visual Table Builder** is a Gutenberg table builder for creating responsive pricing tables, comparison tables, feature matrices, and structured data tables without code.
+**WSTech Visual Table Builder** is a visual WordPress table builder for creating responsive pricing tables, comparison tables, feature matrices, and structured data tables directly in Gutenberg.
 
-Build tables visually with drag-and-drop editing, merged cells, templates, sorting, search, pagination, CSV import/export, and mobile display controls. Create reusable tables once and insert them anywhere with shortcodes, or build inline tables directly in Gutenberg.
+Build tables with a visual Gutenberg editor, drag-and-drop controls, merged cells, starter templates, CSV import/export, sorting, search, pagination, and mobile display options. Create reusable tables once and insert them anywhere with shortcodes, or build inline tables directly inside the block editor.
+
+= What You Can Build =
+
+Use the plugin for pricing tables, product comparison tables, feature comparison charts, employee directories, class timetables, project trackers, invoice tables, nutrition facts tables, and searchable data tables.
 
 = ✨ Key Features =
 
@@ -108,29 +112,29 @@ Build tables visually with drag-and-drop editing, merged cells, templates, sorti
 
 == Features ==
 
-= Drag & Drop Table Builder =
+= Visual Gutenberg Table Editor =
 Build tables directly in the WordPress editor using a visual grid. Click any cell to edit content, use toolbar controls for common formatting, and reorder rows or columns with drag and drop controls. The editor is designed for people who need spreadsheet-style table control without writing HTML.
 
 = Merge Cells =
 Create more advanced table layouts with colspan and rowspan support. Select a rectangular group of cells, merge them into one larger cell, and unmerge later when the layout needs to change. This is useful for pricing tables, schedules, invoice totals, grouped comparison rows, and table headings.
 
-= Responsive Tables =
-Choose between horizontal scroll mode and Stack on Mobile mode. Horizontal scroll keeps wide tables intact on smaller screens, while Stack on Mobile turns rows into compact vertical cards with column labels.
+= Responsive Pricing and Comparison Tables =
+Choose between horizontal scroll mode and Stack on Mobile mode. Horizontal scroll keeps wide pricing, comparison, and data tables intact on smaller screens, while Stack on Mobile turns rows into compact vertical cards with column labels.
 
-= CSV Import and Export =
+= CSV Import / Export for Table Data =
 Import CSV files from Excel, Google Sheets, LibreOffice, or pasted spreadsheet data. Export CSV from the editor, and optionally enable a frontend CSV export button for visitors when a table needs downloadable data.
 
 = JSON Backup and Restore =
 Export a full `.vtb.json` backup that includes table content, merged cells, styles, captions, responsive settings, sorting, search, pagination, and other table options. Import the JSON file later to restore the table state.
 
-= Reusable Tables =
+= Reusable WordPress Tables with Shortcodes =
 Create tables in **WSTech Tables → Add New**, publish them once, and embed them across multiple pages. Updating the saved table updates every shortcode instance automatically.
 
 = Shortcodes =
 Embed reusable tables with `[wstech_table id="123"]` or `[wstech_table slug="pricing-table"]`. Shortcodes work in posts, pages, widgets, Classic Editor, Elementor, Divi, Beaver Builder, and PHP templates.
 
-= Search and Pagination =
-Enable live search to help visitors filter table rows instantly. Enable pagination when a table has many rows and should be split into smaller page sets.
+= Sortable Searchable Data Tables =
+Enable live search to help visitors filter table rows instantly. Add sortable columns and pagination when a data table has many rows and should be easier to scan.
 
 = Templates =
 Start faster with built-in templates including blank table, employee directory, pricing table, product comparison, invoice, class timetable, sports standings, project tracker, budget tracker, and nutrition facts.
@@ -219,29 +223,26 @@ If a shortcode does not display a table, confirm that the table exists, is publi
 
 == Frequently Asked Questions ==
 
-= How do I create a table? =
-Go to **WSTech Tables → Add New**, enter a title, build the table visually, configure the table settings, and click **Publish**. Copy the shortcode shown in the sidebar to embed the table.
+= How do I create a pricing table in WordPress? =
+Go to **WSTech Tables → Add New**, start with the Pricing Table template or a blank table, edit the plans and features visually, then publish and embed it with the generated shortcode.
 
-= How do I use shortcodes? =
-Use `[wstech_table id="123"]` for a saved table ID or `[wstech_table slug="pricing-table"]` for a saved table slug. Paste the shortcode anywhere WordPress supports shortcodes.
+= How do I build a comparison table in Gutenberg? =
+Add the **Visual Table Builder** block in Gutenberg or create a reusable table from **WSTech Tables**. You can use templates, merge cells, add headers, and enable responsive display options.
 
-= How do I embed a table in Elementor? =
-Create a table in WSTech Tables → Add New, publish it, copy the shortcode, then paste it into an **Elementor Shortcode Widget**.
+= Can I create responsive data tables in WordPress? =
+Yes. Tables can use horizontal scroll for wide layouts or Stack on Mobile mode for a labeled mobile view. Sorting, search, and pagination can also be enabled per table.
+
+= Can I import CSV or Excel data into a table? =
+Yes. Export your Excel, Google Sheets, or LibreOffice data as CSV, then use the **Import CSV** button. You can upload a CSV file or paste CSV content.
+
+= Does the plugin work with Elementor and shortcodes? =
+Yes. Create a reusable table, copy its shortcode, then paste it into an Elementor Shortcode widget, Divi module, Classic Editor content, widgets, or any shortcode-compatible area.
 
 = Can I use the same table on multiple pages? =
 Yes! Create the table once in WSTech Tables, then paste the same shortcode on as many pages as you want. Editing the table updates it everywhere.
 
-= Is the plugin mobile responsive? =
-Yes. Use horizontal scroll mode for wide tables or Stack on Mobile mode to turn each row into a labeled mobile layout.
-
 = Does it work with Classic Editor? =
 Yes. Use the shortcode `[wstech_table id="123"]` in the Classic Editor text area.
-
-= Can I import data from Excel? =
-Yes. Export your Excel data as CSV, then use the **Import CSV** button in the block toolbar.
-
-= Can I import CSV files? =
-Yes. Upload a CSV file or paste CSV content into the importer. The plugin detects common delimiters and converts rows into table cells.
 
 = Can I export tables? =
 Yes. Use CSV export for spreadsheet data, or JSON export for a full table backup that includes styles and settings.
@@ -263,14 +264,18 @@ The public source repository is https://github.com/shivmaikhuri12/wstech-visual-
 
 == Screenshots ==
 
-1. Gutenberg table builder for creating pricing, comparison, and data tables
-2. WSTech Tables admin screen for managing reusable tables
-3. Template picker with pricing table, product comparison, and other built-in layouts
-4. CSV and JSON import modal for adding or restoring table data
-5. Responsive data table with sorting, search, and pagination
-6. Reusable table shortcode embedded in Elementor
+1. Visual Gutenberg table builder for pricing tables, comparison tables, and responsive data tables
+2. WSTech Tables admin dashboard for managing reusable shortcode tables
+3. Template picker with pricing, product comparison, invoice, timetable, and directory layouts
+4. CSV and JSON import/export workflow for table data and full table backups
+5. Responsive sortable and searchable frontend data table with pagination
+6. Reusable table shortcode embedded in Elementor and other page builders
 
 == Changelog ==
+
+= 2.0.2 =
+* Fixed the Installed Plugins details modal to use the native WordPress.org plugin information response instead of a local custom override.
+* Restored standard WordPress.org plugin details behavior, including support for Screenshots, Reviews, ratings, and install metadata where available.
 
 = 2.0.1 =
 * Fixed release metadata so the plugin version header, stable tag, and WordPress.org SVN tag match.
@@ -302,6 +307,9 @@ The public source repository is https://github.com/shivmaikhuri12/wstech-visual-
 * CSV export, responsive modes
 
 == Upgrade Notice ==
+
+= 2.0.2 =
+Maintenance release. Restores the native WordPress.org plugin details modal behavior in the Installed Plugins screen.
 
 = 2.0.1 =
 Maintenance release. Fixes WordPress.org release metadata for the 2.0.1 SVN tag.

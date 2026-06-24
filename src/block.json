@@ -2,7 +2,7 @@
 	"$schema": "https://schemas.wp.org/trunk/block.json",
 	"apiVersion": 3,
 	"name": "vtb/table-builder",
-	"version": "2.0.1",
+	"version": "2.0.2",
 	"title": "Visual Table Builder",
 	"category": "common",
 	"icon": "editor-table",
