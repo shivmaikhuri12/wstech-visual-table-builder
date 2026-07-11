@@ -8,6 +8,9 @@
 import { __ } from '@wordpress/i18n';
 import { createCell } from './tableHelpers';
 
+export const MAX_ROWS = 10000;
+export const MAX_COLS = 200;
+
 /**
  * Auto-detects the delimiter used in CSV text.
  *
@@ -108,15 +111,16 @@ export function parseCSV( csvText ) {
 /**
  * Reads a CSV file and returns parsed data.
  *
- * @param {File} file The CSV File object.
+ * @param {File}     file   The CSV File object.
+ * @param {Function} parser Text parser. Defaults to the existing CSV parser.
  * @return {Promise<{ tableData: Array, rows: number, cols: number }>} Parsed file data.
  */
-export function readCSVFile( file ) {
+export function readCSVFile( file, parser = parseCSV ) {
 	return new Promise( ( resolve, reject ) => {
 		const reader = new FileReader();
 		reader.onload = ( e ) => {
 			try {
-				const result = parseCSV( e.target.result );
+				const result = parser( e.target.result );
 				resolve( result );
 			} catch ( err ) {
 				reject( err );

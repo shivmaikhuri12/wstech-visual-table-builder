@@ -6,7 +6,8 @@
 import { __ } from '@wordpress/i18n';
 import { useState, useRef } from '@wordpress/element';
 import { Modal, Button, TextareaControl, Notice } from '@wordpress/components';
-import { parseCSV, readCSVFile } from '../utils/csvImport';
+import { readCSVFile } from '../utils/csvImport';
+import { parseTable } from '../utils/tableImport';
 import { importTableFromJSON } from '../utils/jsonIO';
 
 export default function ImportModal( { isOpen, onClose, onImport } ) {
@@ -45,7 +46,7 @@ export default function ImportModal( { isOpen, onClose, onImport } ) {
 			return;
 		}
 		try {
-			const result = parseCSV( csvText );
+			const result = parseTable( csvText );
 			if ( ! result.tableData.length ) {
 				setError(
 					__(
@@ -73,7 +74,7 @@ export default function ImportModal( { isOpen, onClose, onImport } ) {
 			return;
 		}
 		try {
-			const result = await readCSVFile( file );
+			const result = await readCSVFile( file, parseTable );
 			if ( ! result.tableData.length ) {
 				setError(
 					__(
@@ -147,11 +148,10 @@ export default function ImportModal( { isOpen, onClose, onImport } ) {
 
 	const acceptTypes =
 		activeTab === 'csv' ? '.csv,.tsv,.txt' : '.json,.vtb.json';
-	const csvPlaceholder = [
-		__( 'Paste CSV data here…', 'wstech-visual-table-builder' ),
-		__( 'Name, Email, Phone', 'wstech-visual-table-builder' ),
-		__( 'John, john@email.com, 123–456', 'wstech-visual-table-builder' ),
-	].join( '\n' );
+	const tablePlaceholder = __(
+		'Paste a table from ChatGPT, Claude, Gemini, Excel, Google Sheets or CSV...',
+		'wstech-visual-table-builder'
+	);
 
 	return (
 		<Modal
@@ -172,7 +172,7 @@ export default function ImportModal( { isOpen, onClose, onImport } ) {
 					}` }
 					onClick={ () => handleTabChange( 'csv' ) }
 				>
-					📄 { __( 'CSV Import', 'wstech-visual-table-builder' ) }
+					📄 { __( 'Table Import', 'wstech-visual-table-builder' ) }
 				</button>
 				<button
 					className={ `vtb-import-tab ${
@@ -240,7 +240,7 @@ export default function ImportModal( { isOpen, onClose, onImport } ) {
 					<div className="vtb-import-divider">
 						<span>
 							{ __(
-								'or paste CSV data',
+								'or paste table data',
 								'wstech-visual-table-builder'
 							) }
 						</span>
@@ -248,13 +248,19 @@ export default function ImportModal( { isOpen, onClose, onImport } ) {
 					<TextareaControl
 						value={ csvText }
 						onChange={ setCsvText }
-						placeholder={ csvPlaceholder }
+						placeholder={ tablePlaceholder }
 						rows={ 6 }
 					/>
+					<p className="vtb-import-helper">
+						{ __(
+							'Supports: ChatGPT • Claude • Gemini • Excel • Google Sheets • CSV',
+							'wstech-visual-table-builder'
+						) }
+					</p>
 					<div className="vtb-import-actions">
 						<Button variant="primary" onClick={ handleCSVPaste }>
 							{ __(
-								'Import Pasted Data',
+								'Import Table',
 								'wstech-visual-table-builder'
 							) }
 						</Button>

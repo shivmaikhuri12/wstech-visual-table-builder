@@ -2,20 +2,20 @@
 Contributors: shivmaikhuri
 Donate link: https://wstech.in/donate
 Tags: table builder, pricing table, comparison table, responsive table, data table
-Requires at least: 6.2
+Requires at least: 6.3
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 2.0.2
+Stable tag: 2.1.0
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-Create responsive pricing, comparison and data tables in Gutenberg with visual editing, reusable shortcodes, sorting, search and CSV import/export.
+Create responsive Gutenberg tables with Smart Import for AI, Excel and CSV, plus visual editing, shortcodes, sorting, search and export.
 
 == Description ==
 
 **WSTech Visual Table Builder** is a visual WordPress table builder for creating responsive pricing tables, comparison tables, feature matrices, and structured data tables directly in Gutenberg.
 
-Build tables with a visual Gutenberg editor, drag-and-drop controls, merged cells, starter templates, CSV import/export, sorting, search, pagination, and mobile display options. Create reusable tables once and insert them anywhere with shortcodes, or build inline tables directly inside the block editor.
+Build tables with a visual Gutenberg editor, drag-and-drop controls, merged cells, starter templates, Smart Import, CSV import/export, sorting, search, pagination, and mobile display options. Paste Markdown tables from ChatGPT, Claude, or Gemini, paste tabular data from Excel or Google Sheets, or continue using CSV and TSV data. Create reusable tables once and insert them anywhere with shortcodes, or build inline tables directly inside the block editor.
 
 = What You Can Build =
 
@@ -55,9 +55,11 @@ Use the plugin for pricing tables, product comparison tables, feature comparison
 * Default (Indigo), Striped (Sky Blue), Bordered (Slate), Dark, Minimal, Colorful
 
 **Data Import / Export**
+* Smart Import — automatically detects Markdown tables, CSV, and TSV
+* Paste tables from ChatGPT, Claude, Gemini, Excel, or Google Sheets
 * Export CSV (always available in editor)
 * Export JSON (.vtb.json) — full table backup including styles and settings
-* Import CSV — file upload or paste, auto-detects delimiter
+* Import CSV and TSV — file upload or paste, with automatic delimiter detection
 * Import JSON — restore a previously exported .vtb.json
 * Frontend CSV Export button (opt-in per table)
 
@@ -273,6 +275,13 @@ The public source repository is https://github.com/shivmaikhuri12/wstech-visual-
 
 == Changelog ==
 
+= 2.1.0 =
+* Added Smart Import with automatic Markdown table, CSV, and TSV detection.
+* Added support for tables pasted from ChatGPT, Claude, Gemini, Excel, and Google Sheets.
+* Markdown imports now ignore separator rows and correctly handle optional leading and trailing pipes.
+* Updated the Table Import modal copy and guidance for supported sources.
+* Preserved the existing CSV, TSV, JSON import, and export workflows.
+
 = 2.0.2 =
 * Fixed the Installed Plugins details modal to use the native WordPress.org plugin information response instead of a local custom override.
 * Restored standard WordPress.org plugin details behavior, including support for Screenshots, Reviews, ratings, and install metadata where available.
@@ -307,6 +316,9 @@ The public source repository is https://github.com/shivmaikhuri12/wstech-visual-
 * CSV export, responsive modes
 
 == Upgrade Notice ==
+
+= 2.1.0 =
+Adds Smart Import for AI-generated Markdown tables and improves the Table Import workflow while preserving existing CSV, TSV, and JSON support.
 
 = 2.0.2 =
 Maintenance release. Restores the native WordPress.org plugin details modal behavior in the Installed Plugins screen.
