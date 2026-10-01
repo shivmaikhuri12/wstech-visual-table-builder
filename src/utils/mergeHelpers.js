@@ -1,3 +1,4 @@
+import { assertTableIntegrity, MergeSafetyError } from './mergeIntegrity';
 /**
  * mergeHelpers.js
  * Cell merge / unmerge utilities for Visual Table Builder.
@@ -43,9 +44,10 @@ export function getSelectionBounds( selectedCells ) {
  * Validates that the selection is rectangular and contains more than one cell.
  *
  * @param {Array} selectedCells Array of { row, col }.
+ * @param {Array} tableData     Optional grid to check existing merges.
  * @return {boolean} Whether the selected cells can be merged.
  */
-export function canMerge( selectedCells ) {
+export function canMerge( selectedCells, tableData ) {
 	if ( ! selectedCells || selectedCells.length < 2 ) {
 		return false;
 	}
@@ -74,6 +76,17 @@ export function canMerge( selectedCells ) {
 		}
 	}
 
+	if (
+		tableData &&
+		selectedCells.some( ( { row, col } ) => {
+			const cell = tableData[ row ]?.[ col ];
+			return (
+				! cell || cell.hidden || cell.rowspan > 1 || cell.colspan > 1
+			);
+		} )
+	) {
+		return false;
+	}
 	return true;
 }
 
@@ -100,11 +113,16 @@ export function canUnmerge( selectedCells, tableData ) {
  * Merges the selected cells into one.
  * The top-left cell keeps content; other cells become hidden.
  *
- * @param {Array} tableData     Current table data.
- * @param {Array} selectedCells Array of { row, col }.
+ * @param {Array}  tableData     Current table data.
+ * @param {Array}  selectedCells Array of { row, col }.
+ * @param {Object} options       Header/footer section flags.
  * @return {Array} Updated table data.
  */
-export function mergeCells( tableData, selectedCells ) {
+export function mergeCells( tableData, selectedCells, options = {} ) {
+	assertTableIntegrity( tableData, options );
+	if ( ! canMerge( selectedCells, tableData ) ) {
+		throw new MergeSafetyError();
+	}
 	const bounds = getSelectionBounds( selectedCells );
 	if ( ! bounds ) {
 		return tableData;
@@ -113,6 +131,18 @@ export function mergeCells( tableData, selectedCells ) {
 	const { startRow, endRow, startCol, endCol } = bounds;
 	const rowSpan = endRow - startRow + 1;
 	const colSpan = endCol - startCol + 1;
+
+	const footer =
+		options.hasFooterRow &&
+		tableData.length > ( options.hasHeaderRow ? 2 : 1 );
+	if (
+		( options.hasHeaderRow && startRow === 0 && endRow > 0 ) ||
+		( footer &&
+			startRow < tableData.length - 1 &&
+			endRow === tableData.length - 1 )
+	) {
+		throw new MergeSafetyError();
+	}
 
 	// Collect content from all selected cells (non-empty)
 	const contents = [];

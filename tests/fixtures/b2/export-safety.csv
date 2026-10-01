@@ -1,0 +1,11 @@
+Case,Value
+Formula,=1+1
+Plus,"+SUM(1,1)"
+Minus,"-SUM(1,1)"
+At,"@SUM(1,1)"
+Whitespace,  =1+1
+Negative,-10
+Number,42
+Quoted,"He said ""Hello"""
+Unicode,café 日本語
+URL,https://wstech.in

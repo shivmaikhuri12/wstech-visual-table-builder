@@ -438,3 +438,9 @@
 .vtb-scroll .vtb-table-container {
 	overflow-x: auto;
 }
+
+/* Keyboard focus for sortable column headers. */
+.vtb-table thead th[tabindex="0"]:focus-visible {
+	outline: 2px solid currentcolor;
+	outline-offset: -3px;
+}

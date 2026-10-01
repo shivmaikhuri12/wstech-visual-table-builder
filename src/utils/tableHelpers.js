@@ -1,3 +1,4 @@
+import { guardStructure } from './mergeIntegrity';
 /**
  * tableHelpers.js
  * Pure helper functions for Visual Table Builder — all table data mutations.
@@ -171,6 +172,7 @@ export function buildCellStyle( cell ) {
 // ---------------------------------------------------------------------------
 
 export function addRowAfter( tableData, rowIndex ) {
+	guardStructure( tableData, 'row', 'insert', rowIndex + 1 );
 	const cols = tableData[ 0 ]?.length || 3;
 	const newRow = Array.from( { length: cols }, () => createCell() );
 	const next = [ ...tableData ];
@@ -179,6 +181,7 @@ export function addRowAfter( tableData, rowIndex ) {
 }
 
 export function addRowBefore( tableData, rowIndex ) {
+	guardStructure( tableData, 'row', 'insert', rowIndex );
 	const cols = tableData[ 0 ]?.length || 3;
 	const newRow = Array.from( { length: cols }, () => createCell() );
 	const next = [ ...tableData ];
@@ -187,6 +190,7 @@ export function addRowBefore( tableData, rowIndex ) {
 }
 
 export function deleteRow( tableData, rowIndex ) {
+	guardStructure( tableData, 'row', 'delete', rowIndex );
 	if ( tableData.length <= 1 ) {
 		return tableData;
 	}
@@ -194,6 +198,7 @@ export function deleteRow( tableData, rowIndex ) {
 }
 
 export function moveRow( tableData, fromIndex, toIndex ) {
+	guardStructure( tableData, 'row', 'move', fromIndex, toIndex );
 	const next = [ ...tableData ];
 	const [ moved ] = next.splice( fromIndex, 1 );
 	next.splice( toIndex, 0, moved );
@@ -205,6 +210,7 @@ export function moveRow( tableData, fromIndex, toIndex ) {
 // ---------------------------------------------------------------------------
 
 export function addColumnAfter( tableData, colIndex ) {
+	guardStructure( tableData, 'col', 'insert', colIndex + 1 );
 	return tableData.map( ( row ) => {
 		const next = [ ...row ];
 		next.splice( colIndex + 1, 0, createCell() );
@@ -213,6 +219,7 @@ export function addColumnAfter( tableData, colIndex ) {
 }
 
 export function addColumnBefore( tableData, colIndex ) {
+	guardStructure( tableData, 'col', 'insert', colIndex );
 	return tableData.map( ( row ) => {
 		const next = [ ...row ];
 		next.splice( colIndex, 0, createCell() );
@@ -221,6 +228,7 @@ export function addColumnBefore( tableData, colIndex ) {
 }
 
 export function deleteColumn( tableData, colIndex ) {
+	guardStructure( tableData, 'col', 'delete', colIndex );
 	if ( tableData[ 0 ]?.length <= 1 ) {
 		return tableData;
 	}
@@ -230,6 +238,7 @@ export function deleteColumn( tableData, colIndex ) {
 }
 
 export function moveColumn( tableData, fromIndex, toIndex ) {
+	guardStructure( tableData, 'col', 'move', fromIndex, toIndex );
 	return tableData.map( ( row ) => {
 		const next = [ ...row ];
 		const [ moved ] = next.splice( fromIndex, 1 );
@@ -270,6 +279,7 @@ export function updateCellStyle( tableData, rowIndex, colIndex, styleUpdates ) {
  * @return {Array} Updated table data.
  */
 export function duplicateRow( tableData, rowIndex ) {
+	guardStructure( tableData, 'row', 'duplicate', rowIndex );
 	const rowCopy = tableData[ rowIndex ].map( ( cell ) => ( {
 		...cell,
 		styles: { ...cell.styles },
@@ -287,6 +297,7 @@ export function duplicateRow( tableData, rowIndex ) {
  * @return {Array} Updated table data.
  */
 export function duplicateColumn( tableData, colIndex ) {
+	guardStructure( tableData, 'col', 'duplicate', colIndex );
 	return tableData.map( ( row ) => {
 		const next = [ ...row ];
 		const colCopy = {

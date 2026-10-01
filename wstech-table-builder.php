@@ -3,7 +3,7 @@
  * Plugin Name: WSTech Visual Table Builder
  * Plugin URI: https://github.com/shivmaikhuri12/wstech-visual-table-builder
  * Description: Professional visual table builder for WordPress with drag-and-drop editing, merge cells, templates, import/export, shortcodes, and responsive data tables.
- * Version: 2.1.0
+ * Version: 2.1.1
  * Requires at least: 6.3
  * Requires PHP: 7.4
  * Author: Web Solution Technologies
@@ -22,7 +22,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Plugin constants.
  */
-define( 'WSTB_VERSION', '2.1.0' );
+define( 'WSTB_VERSION', '2.1.1' );
 define( 'WSTB_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'WSTB_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 define( 'WSTB_PLUGIN_FILE', __FILE__ );
@@ -382,7 +382,7 @@ function wstb_duplicate_table() {
 
 	// Create the duplicate post.
 	$new_post_id = wp_insert_post(
-		array(
+		wp_slash( array(
 			'post_title'   => sprintf(
 				/* translators: %s: original table title */
 				__( '%s (Copy)', 'wstech-visual-table-builder' ),
@@ -392,7 +392,7 @@ function wstb_duplicate_table() {
 			'post_status'  => 'draft',
 			'post_type'    => 'wstech_table',
 			'post_author'  => get_current_user_id(),
-		)
+		) )
 	);
 
 	if ( is_wp_error( $new_post_id ) ) {
@@ -404,8 +404,12 @@ function wstb_duplicate_table() {
 
 	if ( $post_meta ) {
 		foreach ( $post_meta as $meta_key => $meta_values ) {
+			// The save hook already regenerated this derived value from block content.
+			if ( '_wstech_table_data' === $meta_key && metadata_exists( 'post', $new_post_id, $meta_key ) ) {
+				continue;
+			}
 			foreach ( $meta_values as $meta_value ) {
-				add_post_meta( $new_post_id, $meta_key, maybe_unserialize( $meta_value ) );
+				add_post_meta( $new_post_id, $meta_key, wp_slash( maybe_unserialize( $meta_value ) ) );
 			}
 		}
 	}
@@ -458,6 +462,11 @@ function wstb_sync_block_to_meta( $post_id ) {
 	// Block attributes are FLAT (e.g. theme, sortable, hasHeaderRow)
 	// not nested under settings/styles. Extract into structured JSON.
 	$attrs = isset( $vtb_block['attrs'] ) && is_array( $vtb_block['attrs'] ) ? $vtb_block['attrs'] : array();
+	$block_type = WP_Block_Type_Registry::get_instance()->get_registered( 'vtb/table-builder' );
+	if ( $block_type ) {
+		// Use the same schema validation/defaults as block rendering; preserve explicit false.
+		$attrs = $block_type->prepare_attributes_for_render( $attrs );
+	}
 
 	$table_data_value = array(
 		'version'     => 1,
@@ -489,7 +498,7 @@ function wstb_sync_block_to_meta( $post_id ) {
 	update_post_meta(
 		$post_id,
 		'_wstech_table_data',
-		wp_json_encode( $table_data_value, JSON_UNESCAPED_UNICODE )
+		wp_slash( wp_json_encode( $table_data_value, JSON_UNESCAPED_UNICODE ) )
 	);
 }
 add_action( 'save_post', 'wstb_sync_block_to_meta' );

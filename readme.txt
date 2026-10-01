@@ -3,9 +3,9 @@ Contributors: shivmaikhuri
 Donate link: https://wstech.in/donate
 Tags: table builder, pricing table, comparison table, responsive table, data table
 Requires at least: 6.3
-Tested up to: 7.0
+Tested up to: 7.1.2
 Requires PHP: 7.4
-Stable tag: 2.1.0
+Stable tag: 2.1.1
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -275,6 +275,13 @@ The public source repository is https://github.com/shivmaikhuri12/wstech-visual-
 
 == Changelog ==
 
+= 2.1.1 =
+* Stability and hardening release: preserve header defaults and quote/backslash data when saving and duplicating tables.
+* Improve CSV/JSON import correctness, size limits and spreadsheet-safe CSV exports.
+* Correct date sorting and retain sorting during search/pagination; add keyboard sorting.
+* Guard structural edits that could corrupt merged cells, with guidance to unmerge first.
+* Tested with WordPress 7.1.2.
+
 = 2.1.0 =
 * Added Smart Import with automatic Markdown table, CSV, and TSV detection.
 * Added support for tables pasted from ChatGPT, Claude, Gemini, Excel, and Google Sheets.
@@ -316,6 +323,9 @@ The public source repository is https://github.com/shivmaikhuri12/wstech-visual-
 * CSV export, responsive modes
 
 == Upgrade Notice ==
+
+= 2.1.1 =
+Stability and correctness update. Protects saved data, hardens imports/exports, fixes frontend controls and guards unsafe merged-cell edits.
 
 = 2.1.0 =
 Adds Smart Import for AI-generated Markdown tables and improves the Table Import workflow while preserving existing CSV, TSV, and JSON support.

@@ -36,6 +36,8 @@ export default function ImportModal( { isOpen, onClose, onImport } ) {
 	// ---------- CSV Import ----------
 
 	const handleCSVPaste = () => {
+		setError( '' );
+		setSuccess( '' );
 		if ( ! csvText.trim() ) {
 			setError(
 				__(
@@ -56,6 +58,14 @@ export default function ImportModal( { isOpen, onClose, onImport } ) {
 				);
 				return;
 			}
+			if ( result.truncated ) {
+				throw new Error(
+					__(
+						'Import exceeds supported limits. Existing table unchanged.',
+						'wstech-visual-table-builder'
+					)
+				);
+			}
 			onImport( result.tableData );
 			setSuccess(
 				`${ result.rows } rows × ${ result.cols } columns imported!`
@@ -73,6 +83,8 @@ export default function ImportModal( { isOpen, onClose, onImport } ) {
 		if ( ! file ) {
 			return;
 		}
+		setError( '' );
+		setSuccess( '' );
 		try {
 			const result = await readCSVFile( file, parseTable );
 			if ( ! result.tableData.length ) {
@@ -83,6 +95,14 @@ export default function ImportModal( { isOpen, onClose, onImport } ) {
 					)
 				);
 				return;
+			}
+			if ( result.truncated ) {
+				throw new Error(
+					__(
+						'Import exceeds supported limits. Existing table unchanged.',
+						'wstech-visual-table-builder'
+					)
+				);
 			}
 			onImport( result.tableData );
 			setSuccess(
@@ -103,6 +123,8 @@ export default function ImportModal( { isOpen, onClose, onImport } ) {
 		if ( ! file ) {
 			return;
 		}
+		setError( '' );
+		setSuccess( '' );
 		try {
 			const attrs = await importTableFromJSON( file );
 			onImport( attrs.tableData, attrs );
@@ -149,7 +171,7 @@ export default function ImportModal( { isOpen, onClose, onImport } ) {
 	const acceptTypes =
 		activeTab === 'csv' ? '.csv,.tsv,.txt' : '.json,.vtb.json';
 	const tablePlaceholder = __(
-		'Paste a table from ChatGPT, Claude, Gemini, Excel, Google Sheets or CSV...',
+		'Paste a table from ChatGPT, Claude, Gemini, Excel, Google Sheets or CSV…',
 		'wstech-visual-table-builder'
 	);
 

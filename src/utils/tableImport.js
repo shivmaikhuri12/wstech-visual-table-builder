@@ -3,7 +3,8 @@
  * Detects and parses supported plain-text table formats.
  */
 
-import { parseCSV, MAX_ROWS, MAX_COLS } from './csvImport';
+import { parseCSV, detectDelimiter } from './csvImport';
+import { assertTextSize, assertDimensions } from './importLimits';
 import { createCell } from './tableHelpers';
 
 const FORMAT_MARKDOWN = 'markdown';
@@ -48,6 +49,7 @@ function splitMarkdownRow( line ) {
 		const character = value[ index ];
 
 		if ( character === '|' && ! isEscaped( value, index ) ) {
+			assertDimensions( 1, cells.length + 1 );
 			cells.push( current.trim() );
 			current = '';
 			continue;
@@ -60,6 +62,7 @@ function splitMarkdownRow( line ) {
 		current += character;
 	}
 
+	assertDimensions( 1, cells.length + 1 );
 	cells.push( current.trim() );
 	return cells;
 }
@@ -104,171 +107,114 @@ function isMarkdownSeparator( cells ) {
  * @param {string} text Plain text that may contain a Markdown table.
  * @return {Array<Array<string>>|null} Markdown rows, or null when not found.
  */
+function* textLines( text ) {
+	let start = 0;
+	while ( start < text.length ) {
+		const end = text.indexOf( '\n', start );
+		if ( end === -1 ) {
+			yield text.slice( start ).replace( /\r$/, '' );
+			return;
+		}
+		yield text.slice( start, end ).replace( /\r$/, '' );
+		start = end + 1;
+	}
+}
 function findMarkdownRows( text ) {
-	const lines = text.replace( /^\uFEFF/, '' ).split( /\r?\n/ );
-
-	for ( let index = 1; index < lines.length; index++ ) {
-		if ( ! lines[ index - 1 ].trim() || ! lines[ index ].trim() ) {
+	const lines = textLines( text.replace( /^\uFEFF/, '' ) );
+	let previous = '';
+	let quoted = false;
+	for ( const line of lines ) {
+		const wasQuoted = quoted;
+		for ( let i = 0; i < line.length; i++ ) {
+			if ( line[ i ] === '"' ) {
+				if ( quoted && line[ i + 1 ] === '"' ) {
+					i++;
+				} else {
+					quoted = ! quoted;
+				}
+			}
+		}
+		// Do not mistake Markdown-looking content inside a CSV quoted record for a table.
+		if ( wasQuoted || quoted ) {
+			previous = '';
 			continue;
 		}
-
-		const header = splitMarkdownRow( lines[ index - 1 ] );
-		const separator = splitMarkdownRow( lines[ index ] );
-
+		// Only split potential Markdown separators; ordinary CSV/prose is not Markdown.
 		if (
-			header.length < 2 ||
-			header.length !== separator.length ||
-			! isMarkdownSeparator( separator )
+			! line.includes( '|' ) ||
+			/[^|:\s-]/.test( line ) ||
+			! previous.trim()
 		) {
+			previous = line;
 			continue;
 		}
-
+		const separator = splitMarkdownRow( line );
+		if ( ! isMarkdownSeparator( separator ) ) {
+			previous = line;
+			continue;
+		}
+		const header = splitMarkdownRow( previous );
+		if ( header.length !== separator.length ) {
+			previous = line;
+			continue;
+		}
 		const rows = [ header ];
-
-		for ( let rowIndex = index + 1; rowIndex < lines.length; rowIndex++ ) {
-			const line = lines[ rowIndex ];
-			if ( ! line.trim() ) {
+		let cols = header.length;
+		for ( const body of lines ) {
+			if ( ! body.trim() ) {
 				break;
 			}
-
-			const row = splitMarkdownRow( line );
+			const row = splitMarkdownRow( body );
 			if ( row.length < 2 ) {
 				break;
 			}
+			cols = Math.max( cols, row.length );
+			assertDimensions( rows.length + 1, cols );
 			rows.push( row );
 		}
-
 		return rows;
 	}
-
 	return null;
 }
-
 /**
- * Counts a delimiter on the first non-empty line. This mirrors the delimiter
- * choices supported by the existing CSV parser.
- *
- * @param {string} text      Plain text.
- * @param {string} delimiter Delimiter to count.
- * @return {number} Number of delimiter occurrences.
- */
-function countFirstLineDelimiter( text, delimiter ) {
-	const firstLine =
-		text
-			.replace( /^\uFEFF/, '' )
-			.split( /\r?\n/ )
-			.find( ( line ) => line.trim() ) || '';
-
-	return firstLine.split( delimiter ).length - 1;
-}
-
-/**
- * Detects the supported table format without changing the source text.
- *
+ * Detect and parse once. Limits reject the entire input; no truncated results.
  * @param {string} text Plain-text table input.
- * @return {string} Internal format identifier.
  */
-function detectFormat( text ) {
-	if ( ! text || ! text.trim() ) {
-		return FORMAT_UNKNOWN;
-	}
-
-	if ( findMarkdownRows( text ) ) {
-		return FORMAT_MARKDOWN;
-	}
-
-	const commaCount = countFirstLineDelimiter( text, ',' );
-	const semicolonCount = countFirstLineDelimiter( text, ';' );
-	const pipeCount = countFirstLineDelimiter( text, '|' );
-	const tabCount = countFirstLineDelimiter( text, '\t' );
-	const csvCount = Math.max( commaCount, semicolonCount, pipeCount );
-
-	if ( tabCount > csvCount ) {
-		return FORMAT_TSV;
-	}
-
-	if ( csvCount > 0 ) {
-		return FORMAT_CSV;
-	}
-
-	if ( tabCount > 0 ) {
-		return FORMAT_TSV;
-	}
-
-	if ( text.split( /\r?\n/ ).filter( ( line ) => line.trim() ).length > 1 ) {
-		return FORMAT_CSV;
-	}
-
-	return FORMAT_UNKNOWN;
-}
-
-/**
- * Converts Markdown rows to the existing tableData cell structure.
- *
- * @param {string} text Markdown table text.
- * @return {{ tableData: Array, rows: number, cols: number, truncated: boolean, sourceRows: number, sourceCols: number }} Parsed Markdown result.
- */
-function parseMarkdown( text ) {
+export function parseTable( text ) {
+	assertTextSize( text );
 	const rows = findMarkdownRows( text );
-	if ( ! rows || rows.length === 0 ) {
+	if ( rows ) {
+		const cols = rows.reduce(
+			( maximum, row ) => Math.max( maximum, row.length ),
+			0
+		);
+		assertDimensions( rows.length, cols );
+		return {
+			tableData: rows.map( ( row ) =>
+				Array.from( { length: cols }, ( unused, column ) =>
+					createCell( row[ column ] ?? '' )
+				)
+			),
+			rows: rows.length,
+			cols,
+			format: FORMAT_MARKDOWN,
+			truncated: false,
+		};
+	}
+	if ( ! text.trim() ) {
 		return {
 			tableData: [],
 			rows: 0,
 			cols: 0,
+			format: FORMAT_UNKNOWN,
 			truncated: false,
-			sourceRows: 0,
-			sourceCols: 0,
 		};
 	}
-
-	const sourceRows = rows.length;
-	const sourceCols = rows.reduce(
-		( maximum, row ) => Math.max( maximum, row.length ),
-		0
-	);
-	const limitedRows = rows.slice( 0, MAX_ROWS );
-	const columnCount = Math.min( sourceCols, MAX_COLS );
-	const tableData = limitedRows.map( ( row ) =>
-		Array.from( { length: columnCount }, ( unused, columnIndex ) =>
-			createCell( row[ columnIndex ] || '' )
-		)
-	);
-
+	const delimiter = detectDelimiter( text );
+	const result = parseCSV( text );
 	return {
-		tableData,
-		rows: tableData.length,
-		cols: columnCount,
-		truncated: sourceRows > MAX_ROWS || sourceCols > MAX_COLS,
-		sourceRows,
-		sourceCols,
-	};
-}
-
-/**
- * Detects and parses CSV, TSV, or Markdown table text.
- *
- * @param {string} text Plain-text table input.
- * @return {{ tableData: Array, rows: number, cols: number, truncated: boolean, sourceRows: number, sourceCols: number, format: string }} Parsed table result.
- */
-export function parseTable( text ) {
-	const format = detectFormat( text );
-
-	if ( format === FORMAT_MARKDOWN ) {
-		return {
-			...parseMarkdown( text ),
-			format,
-		};
-	}
-
-	if ( format === FORMAT_CSV || format === FORMAT_TSV ) {
-		return {
-			...parseCSV( text ),
-			format,
-		};
-	}
-
-	return {
-		...parseCSV( text ),
-		format,
+		...result,
+		format: delimiter === '\t' ? FORMAT_TSV : FORMAT_CSV,
+		truncated: false,
 	};
 }

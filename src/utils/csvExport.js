@@ -3,6 +3,8 @@
  * Exports table data to CSV format.
  */
 
+import { csvEscape } from './csvSafety';
+
 /**
  * Converts tableData to CSV string and triggers download.
  *
@@ -23,17 +25,7 @@ export function exportTableAsCSV( tableData, filename = 'table-export' ) {
 			const textarea = document.createElement( 'textarea' );
 			textarea.innerHTML = content;
 			content = textarea.value;
-			// Escape double quotes
-			content = content.replace( /"/g, '""' );
-			// Wrap in quotes if contains comma, newline, or quote
-			if (
-				content.includes( ',' ) ||
-				content.includes( '\n' ) ||
-				content.includes( '"' )
-			) {
-				content = `"${ content }"`;
-			}
-			return content;
+			return csvEscape( content );
 		} )
 	);
 

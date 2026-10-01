@@ -1,11 +1,14 @@
 {
 	"name": "wstech-visual-table-builder",
-	"version": "2.1.0",
+	"version": "2.1.1",
 	"description": "WSTech Visual Table Builder — Professional table builder for WordPress",
 	"author": "Web Solution Technologies (WSTech)",
 	"license": "GPL-2.0-or-later",
 	"homepage": "https://github.com/shivmaikhuri12/wstech-visual-table-builder",
 	"scripts": {
+		"test:b4": "wp-scripts test-unit-js --runInBand tests/merged-integrity.test.js",
+		"test:b3": "wp-scripts test-unit-js --runInBand tests/frontend-state.test.js",
+		"test:b2": "wp-scripts test-unit-js --runInBand tests/import-export.test.js tests/import-modal.test.js",
 		"build": "wp-scripts build",
 		"start": "wp-scripts start",
 		"lint:js": "wp-scripts lint-js",

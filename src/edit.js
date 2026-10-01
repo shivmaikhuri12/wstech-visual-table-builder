@@ -17,6 +17,7 @@ import {
 	ToolbarDropdownMenu,
 	Popover,
 	ColorPalette,
+	Notice,
 } from '@wordpress/components';
 import { useState, useEffect, useRef } from '@wordpress/element';
 
@@ -29,20 +30,20 @@ import {
 	createDefaultTable,
 	normalizeTableData,
 	buildCellStyle,
-	addRowAfter,
-	addRowBefore,
-	deleteRow,
-	addColumnAfter,
-	addColumnBefore,
-	deleteColumn,
-	duplicateRow,
-	duplicateColumn,
+	addRowAfter as rawAddRowAfter,
+	addRowBefore as rawAddRowBefore,
+	deleteRow as rawDeleteRow,
+	addColumnAfter as rawAddColumnAfter,
+	addColumnBefore as rawAddColumnBefore,
+	deleteColumn as rawDeleteColumn,
+	duplicateRow as rawDuplicateRow,
+	duplicateColumn as rawDuplicateColumn,
 	clearRow,
 	clearColumn,
 	updateCell,
 	updateCellStyle,
-	moveRow,
-	moveColumn,
+	moveRow as rawMoveRow,
+	moveColumn as rawMoveColumn,
 } from './utils/tableHelpers';
 import {
 	canMerge,
@@ -50,6 +51,8 @@ import {
 	mergeCells,
 	unmergeCells,
 } from './utils/mergeHelpers';
+
+import { assertTableIntegrity, MergeSafetyError } from './utils/mergeIntegrity';
 
 const COLORS = [
 	{ name: __( 'White', 'wstech-visual-table-builder' ), color: '#ffffff' },
@@ -95,6 +98,7 @@ export default function Edit( { attributes, setAttributes } ) {
 	const [ redoStack, setRedoStack ] = useState( [] );
 	const [ dragState, setDragState ] = useState( null );
 	const tableRef = useRef( null );
+	const [ structureNotice, setStructureNotice ] = useState( '' );
 
 	// ── Init default table ──
 	useEffect( () => {
@@ -145,8 +149,80 @@ export default function Edit( { attributes, setAttributes } ) {
 	};
 
 	const updateTable = ( newData ) => {
+		if ( newData === tableData ) {
+			return;
+		}
 		pushUndo();
 		setAttributes( { tableData: newData } );
+	};
+
+	// Guard every structural entry point: toolbar, context menu, keyboard and drag.
+	const guardedStructure = ( mutation, args, axis ) => {
+		try {
+			const next = mutation( ...args );
+			assertTableIntegrity( next, { hasHeaderRow, hasFooterRow } );
+			setStructureNotice( '' );
+			return next;
+		} catch ( error ) {
+			if ( ! ( error instanceof MergeSafetyError ) ) {
+				throw error;
+			}
+			setStructureNotice(
+				axis === 'row'
+					? __(
+							'Unmerge the affected cells before changing this row or moving it across a merged region.',
+							'wstech-visual-table-builder'
+					  )
+					: __(
+							'Unmerge the affected cells before changing this column or moving it across a merged region.',
+							'wstech-visual-table-builder'
+					  )
+			);
+			return tableData;
+		}
+	};
+	const addRowAfter = ( ...args ) =>
+		guardedStructure( rawAddRowAfter, args, 'row' );
+	const addRowBefore = ( ...args ) =>
+		guardedStructure( rawAddRowBefore, args, 'row' );
+	const deleteRow = ( ...args ) =>
+		guardedStructure( rawDeleteRow, args, 'row' );
+	const addColumnAfter = ( ...args ) =>
+		guardedStructure( rawAddColumnAfter, args, 'col' );
+	const addColumnBefore = ( ...args ) =>
+		guardedStructure( rawAddColumnBefore, args, 'col' );
+	const deleteColumn = ( ...args ) =>
+		guardedStructure( rawDeleteColumn, args, 'col' );
+	const duplicateRow = ( ...args ) =>
+		guardedStructure( rawDuplicateRow, args, 'row' );
+	const duplicateColumn = ( ...args ) =>
+		guardedStructure( rawDuplicateColumn, args, 'col' );
+	const moveRow = ( ...args ) => guardedStructure( rawMoveRow, args, 'row' );
+	const moveColumn = ( ...args ) =>
+		guardedStructure( rawMoveColumn, args, 'col' );
+
+	const guardedAttributes = ( updates ) => {
+		if ( 'hasHeaderRow' in updates || 'hasFooterRow' in updates ) {
+			try {
+				assertTableIntegrity( tableData, {
+					hasHeaderRow,
+					hasFooterRow,
+					...updates,
+				} );
+			} catch ( error ) {
+				if ( ! ( error instanceof MergeSafetyError ) ) {
+					throw error;
+				}
+				setStructureNotice(
+					__(
+						'Unmerge cells crossing the header or footer boundary before changing row sections.',
+						'wstech-visual-table-builder'
+					)
+				);
+				return;
+			}
+		}
+		setAttributes( updates );
 	};
 
 	// ── Cell Selection ──
@@ -299,7 +375,17 @@ export default function Edit( { attributes, setAttributes } ) {
 	// ── Merge / Unmerge ──
 	const handleMerge = () => {
 		if ( canMerge( selectedCells, tableData ) ) {
-			updateTable( mergeCells( tableData, selectedCells ) );
+			updateTable(
+				guardedStructure(
+					mergeCells,
+					[
+						tableData,
+						selectedCells,
+						{ hasHeaderRow, hasFooterRow },
+					],
+					'row'
+				)
+			);
 			setSelectedCells( [ selectedCells[ 0 ] ] );
 		}
 	};
@@ -435,26 +521,7 @@ export default function Edit( { attributes, setAttributes } ) {
 		pushUndo();
 		if ( fullAttrs ) {
 			// Full JSON import — restore all attributes
-			setAttributes( {
-				tableData: importedData,
-				...( fullAttrs.hasHeaderRow !== undefined && {
-					hasHeaderRow: fullAttrs.hasHeaderRow,
-				} ),
-				...( fullAttrs.hasFooterRow !== undefined && {
-					hasFooterRow: fullAttrs.hasFooterRow,
-				} ),
-				...( fullAttrs.theme && { theme: fullAttrs.theme } ),
-				...( fullAttrs.sortable !== undefined && {
-					sortable: fullAttrs.sortable,
-				} ),
-				...( fullAttrs.searchable !== undefined && {
-					searchable: fullAttrs.searchable,
-				} ),
-				...( fullAttrs.pagination !== undefined && {
-					pagination: fullAttrs.pagination,
-				} ),
-				...( fullAttrs.pageSize && { pageSize: fullAttrs.pageSize } ),
-			} );
+			setAttributes( { ...fullAttrs, tableData: importedData } );
 		} else {
 			setAttributes( { tableData: importedData } );
 		}
@@ -500,6 +567,14 @@ export default function Edit( { attributes, setAttributes } ) {
 			tabIndex={ 0 }
 			onKeyDown={ handleKeyDown }
 		>
+			{ structureNotice && (
+				<Notice
+					status="warning"
+					onRemove={ () => setStructureNotice( '' ) }
+				>
+					{ structureNotice }
+				</Notice>
+			) }
 			{ /* ── Block Toolbar ── */ }
 			<BlockControls>
 				<ToolbarGroup>
@@ -605,7 +680,7 @@ export default function Edit( { attributes, setAttributes } ) {
 			{ /* ── Inspector ── */ }
 			<TableInspector
 				attributes={ attributes }
-				setAttributes={ setAttributes }
+				setAttributes={ guardedAttributes }
 			/>
 
 			{ /* ── Modals ── */ }

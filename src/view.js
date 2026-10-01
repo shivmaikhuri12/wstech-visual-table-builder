@@ -1,3 +1,4 @@
+import { csvEscape } from './utils/csvSafety';
 /**
  * view.js
  * Frontend interactivity for WSTech Visual Table Builder.
@@ -17,7 +18,8 @@ import { __, sprintf } from '@wordpress/i18n';
 
 	function initTable( table ) {
 		const wrapper = table.closest( '.vtb-wrapper' );
-		if ( ! wrapper ) {
+		// Block and shortcode asset handles can load this bundle separately.
+		if ( ! wrapper || table.dataset.vtbInitialized === 'true' ) {
 			return;
 		}
 
@@ -32,31 +34,93 @@ import { __, sprintf } from '@wordpress/i18n';
 			return;
 		}
 
+		table.dataset.vtbInitialized = 'true';
 		const pageSize = parseInt( table.dataset.vtbPageSize || '10', 10 );
 		const allRows = Array.from( tbody.querySelectorAll( 'tr' ) );
 		let filteredRows = [ ...allRows ];
+		let query = '';
+		const originalOrder = new Map(
+			allRows.map( ( row, index ) => [ row, index ] )
+		);
 		let currentPage = 1;
 		let sortCol = -1;
 		let sortDir = 'asc';
 
-		// ── Sorting ──
+		// Strict ISO calendar dates only; do not guess regional date formats.
+		function sortValue( value ) {
+			const text = value.trim();
+			if ( ! text ) {
+				return { type: 3, value: '' };
+			}
+			if ( /^\d{4}-\d{2}-\d{2}$/.test( text ) ) {
+				const date = new Date( text + 'T00:00:00Z' );
+				if (
+					! Number.isNaN( date.getTime() ) &&
+					date.toISOString().slice( 0, 10 ) === text
+				) {
+					return { type: 0, value: date.getTime() };
+				}
+			}
+			const numeric = text.replace( /[$\u00a3\u20ac\u20b9,%\s]/g, '' );
+			if (
+				/^[+-]?(?:\d+(?:\.\d*)?|\.\d+)(?:[eE][+-]?\d+)?$/.test(
+					numeric
+				) &&
+				Number.isFinite( Number( numeric ) )
+			) {
+				return { type: 1, value: Number( numeric ) };
+			}
+			return { type: 2, value: text };
+		}
+
+		function compareRows( a, b ) {
+			const valA = sortValue( a.children[ sortCol ]?.textContent || '' );
+			const valB = sortValue( b.children[ sortCol ]?.textContent || '' );
+			let comparison;
+			// Blanks stay last in both directions. Other mixed types have fixed ranks.
+			if ( valA.type === 3 || valB.type === 3 ) {
+				return (
+					valA.type - valB.type ||
+					originalOrder.get( a ) - originalOrder.get( b )
+				);
+			}
+			if ( valA.type !== valB.type ) {
+				comparison = valA.type - valB.type;
+			} else if ( valA.type === 2 ) {
+				comparison = valA.value.localeCompare( valB.value, undefined, {
+					numeric: true,
+					sensitivity: 'base',
+				} );
+			} else {
+				comparison = valA.value - valB.value;
+			}
+			return (
+				( sortDir === 'asc' ? comparison : -comparison ) ||
+				originalOrder.get( a ) - originalOrder.get( b )
+			);
+		}
+
+		// Sorting: the header retains columnheader semantics and gains keyboard focus.
 		if ( isSortable ) {
 			const headers = table.querySelectorAll( 'thead th' );
 			headers.forEach( function ( th, idx ) {
 				th.style.cursor = 'pointer';
 				th.setAttribute( 'role', 'columnheader' );
+				th.setAttribute( 'tabindex', '0' );
 				th.setAttribute( 'aria-sort', 'none' );
-				th.addEventListener( 'click', function () {
+				function activateSort() {
 					if ( sortCol === idx ) {
 						sortDir = sortDir === 'asc' ? 'desc' : 'asc';
 					} else {
 						sortCol = idx;
 						sortDir = 'asc';
 					}
-					// Reset aria
-					headers.forEach( function ( h ) {
-						h.setAttribute( 'aria-sort', 'none' );
-						h.classList.remove( 'vtb-sort-asc', 'vtb-sort-desc' );
+					headers.forEach( function ( header ) {
+						header.setAttribute( 'aria-sort', 'none' );
+						header.classList.remove(
+							'vtb-sort-asc',
+							'vtb-sort-desc'
+						);
 					} );
 					th.setAttribute(
 						'aria-sort',
@@ -65,47 +129,17 @@ import { __, sprintf } from '@wordpress/i18n';
 					th.classList.add(
 						sortDir === 'asc' ? 'vtb-sort-asc' : 'vtb-sort-desc'
 					);
-
-					filteredRows.sort( function ( a, b ) {
-						const cellA = a.children[ idx ];
-						const cellB = b.children[ idx ];
-						if ( ! cellA || ! cellB ) {
-							return 0;
-						}
-						const valA = ( cellA.textContent || '' ).trim();
-						const valB = ( cellB.textContent || '' ).trim();
-
-						// Numeric comparison
-						const numA = parseFloat(
-							valA.replace( /[^\d.\-]/g, '' )
-						);
-						const numB = parseFloat(
-							valB.replace( /[^\d.\-]/g, '' )
-						);
-						if ( ! isNaN( numA ) && ! isNaN( numB ) ) {
-							return sortDir === 'asc'
-								? numA - numB
-								: numB - numA;
-						}
-
-						// Date comparison
-						const dateA = Date.parse( valA );
-						const dateB = Date.parse( valB );
-						if ( ! isNaN( dateA ) && ! isNaN( dateB ) ) {
-							return sortDir === 'asc'
-								? dateA - dateB
-								: dateB - dateA;
-						}
-
-						// String comparison
-						const cmp = valA.localeCompare( valB, undefined, {
-							numeric: true,
-							sensitivity: 'base',
-						} );
-						return sortDir === 'asc' ? cmp : -cmp;
-					} );
-
+					currentPage = 1;
 					renderRows();
+				}
+				th.addEventListener( 'click', activateSort );
+				th.addEventListener( 'keydown', function ( event ) {
+					if ( event.key === 'Enter' || event.key === ' ' ) {
+						event.preventDefault();
+						if ( ! event.repeat ) {
+							activateSort();
+						}
+					}
 				} );
 			} );
 		}
@@ -118,18 +152,7 @@ import { __, sprintf } from '@wordpress/i18n';
 				searchInput.addEventListener( 'input', function () {
 					clearTimeout( debounceTimer );
 					debounceTimer = setTimeout( function () {
-						const query = searchInput.value.toLowerCase().trim();
-						if ( ! query ) {
-							filteredRows = [ ...allRows ];
-						} else {
-							filteredRows = allRows.filter( function ( row ) {
-								return (
-									row.textContent
-										.toLowerCase()
-										.indexOf( query ) !== -1
-								);
-							} );
-						}
+						query = searchInput.value.toLowerCase().trim();
 						currentPage = 1;
 						renderRows();
 					}, 300 );
@@ -139,6 +162,14 @@ import { __, sprintf } from '@wordpress/i18n';
 
 		// ── Pagination ──
 		function renderRows() {
+			// Always derive results from original rows: filter, active sort, then page.
+			filteredRows = allRows.filter(
+				( row ) =>
+					! query || row.textContent.toLowerCase().includes( query )
+			);
+			if ( sortCol >= 0 ) {
+				filteredRows.sort( compareRows );
+			}
 			// Remove all tbody rows
 			while ( tbody.firstChild ) {
 				tbody.removeChild( tbody.firstChild );
@@ -285,18 +316,5 @@ import { __, sprintf } from '@wordpress/i18n';
 
 		// Initial render
 		renderRows();
-	}
-
-	function csvEscape( text ) {
-		text = ( text || '' ).trim();
-		text = text.replace( /"/g, '""' );
-		if (
-			text.indexOf( ',' ) !== -1 ||
-			text.indexOf( '\n' ) !== -1 ||
-			text.indexOf( '"' ) !== -1
-		) {
-			text = '"' + text + '"';
-		}
-		return text;
 	}
 } )();
